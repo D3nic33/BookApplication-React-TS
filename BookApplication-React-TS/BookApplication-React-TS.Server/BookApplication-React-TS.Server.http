@@ -1,0 +1,6 @@
+@BookApplication_React_TS.Server_HostAddress = http://localhost:5124
+
+GET {{BookApplication_React_TS.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
