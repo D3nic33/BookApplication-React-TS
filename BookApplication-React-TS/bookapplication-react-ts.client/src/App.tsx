@@ -1,38 +1,42 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import DefaultLayout from './Layouts/DefaultLayout';
 
-interface Forecast {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
+interface Book {
+    title: string;
+    author: number;
+    releaseDate: string;
+    genre: string;
+    rating: string;
 }
 
 function App() {
-    const [forecasts, setForecasts] = useState<Forecast[]>();
+    const [books, setBooks] = useState<Book[]>([]);
 
     useEffect(() => {
-        populateWeatherData();
+        populateBookData();
     }, []);
 
-    const contents = forecasts === undefined
+    const contents = books.length == 0
         ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
         : <table className="table table-striped" aria-labelledby="tableLabel">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Release Date</th>
+                    <th>Genre</th>
+                    <th>Rating</th>
                 </tr>
             </thead>
             <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
+                {books.map(book =>
+                    <tr key={book.title}>
+                        <td>{book.title}</td>
+                        <td>{book.author}</td>
+                        <td>{book.releaseDate}</td>
+                        <td>{book.genre}</td>
+                        <td>{book.rating}</td>
                     </tr>
                 )}
             </tbody>
@@ -40,17 +44,15 @@ function App() {
 
     return (
         <div>
-            <h1 id="tableLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
+            <DefaultLayout>{contents}</DefaultLayout>
         </div>
     );
 
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
+    async function populateBookData() {
+        const response = await fetch('api/Books');
         if (response.ok) {
             const data = await response.json();
-            setForecasts(data);
+            setBooks(data);
         }
     }
 }

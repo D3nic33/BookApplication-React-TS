@@ -1,0 +1,18 @@
+.menu {
+    padding: 15px;
+    margin-bottom: 30px;
+    overflow: hidden;
+    background-color: #333;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    cursor: default;
+}
+
+a:hover {
+    text-decoration: none;
+    color: darkgray;
+    cursor: default;
+}
