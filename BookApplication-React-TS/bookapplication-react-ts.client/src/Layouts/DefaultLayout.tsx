@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import Menu from '../Components/Menu.tsx';
+import Menu from '../Components/Menu/Menu.tsx';
 
 interface Props {
     children: ReactNode

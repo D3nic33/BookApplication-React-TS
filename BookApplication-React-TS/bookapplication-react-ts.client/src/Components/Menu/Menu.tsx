@@ -1,7 +1,8 @@
 import './Menu.css'
 
 const navigation = [
-    { name: 'Home', href: "/" },
+    { name: 'Home', href: '/'},
+    { name: 'Book Overview', href: "/bookOverview"}
 ]
 
 const Menu = () => (
@@ -9,8 +10,7 @@ const Menu = () => (
         {navigation.map(item => (
             <a key={item.name} href={item.href}>{item.name}</a>
         ))}
-        
-    </div>
-)
+    </div> 
+);
 
 export default Menu;
