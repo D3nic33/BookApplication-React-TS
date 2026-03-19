@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using BookApplication_React_TS.Server.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<BookApplication_React_TSServerContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("BookApplication_React_TSServerContext") ?? throw new InvalidOperationException("Connection string 'BookApplication_React_TSServerContext' not found.")));
 
 // Add services to the container.
 
