@@ -14,6 +14,6 @@ namespace BookApplication_React_TS.Server.Models
         [DataType(DataType.Date)]
         public DateTime ReleaseDate { get; set; }
         public string Genre { get; set; } = string.Empty;
-        public string Rating { get; set; } = string.Empty;
+        public double Rating { get; set; } = 0.0;
     }
 }

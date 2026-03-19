@@ -17,8 +17,8 @@ function BooksOverview() {
     }, []);
 
     const contents = books.length == 0
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tableLabel">
+        ? <p>Geen data</p>
+        : <table id="myForm" className="table table-striped" aria-labelledby="tableLabel">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -48,7 +48,13 @@ function BooksOverview() {
     );
 
     async function populateBookData() {
-        const response = await fetch('api/Books');
+        const response = await fetch('api/Books', {
+            method: "get",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        });
         if (response.ok) {
             const data = await response.json();
             setBooks(data);

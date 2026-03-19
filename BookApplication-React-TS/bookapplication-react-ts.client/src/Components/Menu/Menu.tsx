@@ -2,7 +2,8 @@ import './Menu.css'
 
 const navigation = [
     { name: 'Home', href: '/'},
-    { name: 'Book Overview', href: "/bookOverview"}
+    { name: 'Book Overview', href: "/bookOverview" },
+    { name: 'Add Book', href: "/addBook" }
 ]
 
 const Menu = () => (

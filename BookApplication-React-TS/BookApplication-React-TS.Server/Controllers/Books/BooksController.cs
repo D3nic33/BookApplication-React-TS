@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookApplication_React_TS.Server.Data;
 using BookApplication_React_TS.Server.Models;
@@ -81,7 +76,7 @@ namespace BookApplication_React_TS.Server.Controllers.Books
             _context.Book.Add(book);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBook", new { id = book.Id }, book);
+            return CreatedAtAction("GetBook", new { id = new Guid() }, book);
         }
 
         // DELETE: api/Books/5
