@@ -1,5 +1,3 @@
-import './Menu.css'
-
 const navigation = [
     { name: 'Home', href: '/'},
     { name: 'Book Overview', href: "/bookOverview" },
@@ -7,9 +5,9 @@ const navigation = [
 ]
 
 const Menu = () => (
-    <div className="menu">
+    <div className="flex flex-row bg-orange-400">
         {navigation.map(item => (
-            <a key={item.name} href={item.href}>{item.name}</a>
+            <a className="text-white p-6 hover:bg-orange-300" key={item.name} href={item.href}>{item.name}</a>
         ))}
     </div> 
 );
