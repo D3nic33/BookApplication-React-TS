@@ -14,7 +14,6 @@ interface Book {
 
 function AddBook() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [rating, setRating] = useState(0);
     const [book, setBook] = useState<Book>({
         title: "",
         author: "",
@@ -44,7 +43,7 @@ function AddBook() {
                 <AddBookFormInput book={book} setBook={setBook} title="author" type="text" />
                 <AddBookFormInput book={book} setBook={setBook} title="releaseDate" type="Date" />
                 <AddBookFormInput book={book} setBook={setBook} title="genre" type="text" />
-                <AddBookFormInput book={book} setBook={setBook} title="rating" type="number" rating={rating} setRating={setRating} />
+                <AddBookFormInput book={book} setBook={setBook} title="rating" type="number" />
 
                 <button className="py-4 bg-orange-400 hover:bg-orange-500 text-white w-80 mx-auto rounded-lg" type="submit">Submit</button>
 
