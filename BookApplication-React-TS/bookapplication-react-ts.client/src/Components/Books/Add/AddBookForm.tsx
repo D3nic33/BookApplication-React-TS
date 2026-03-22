@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import '../../App.css';
 import './AddBookFormInput';
 import AddBookFormInput from './AddBookFormInput';
-import SubmitPopup from '../Popup/SubmitPopup';
+import SubmitPopup from '../../Popup/SubmitPopup';
 
 interface Book {
     title: string;

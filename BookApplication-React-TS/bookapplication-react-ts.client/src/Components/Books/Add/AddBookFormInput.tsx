@@ -1,4 +1,4 @@
-import StarRating from "../Rating/StarRating";
+import StarRating from "../../Rating/StarRating";
 
 interface Book {
     title: string;
