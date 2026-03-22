@@ -1,11 +1,14 @@
 import StarRating from "../../Rating/StarRating";
+import DropdownShelf from "./DropDownShelf";
 
 interface Book {
+    id: number;
     title: string;
     author: string;
-    releaseDate: Date;
+    releaseDate: string;
     genre: string;
     rating: number;
+    shelf: string;
 }
 function AddBookFormInput({book, setBook, title, type } : {
     book: Book,
@@ -23,7 +26,7 @@ function AddBookFormInput({book, setBook, title, type } : {
 
     const isNumeric = type == "number"
 
-    return isNumeric ? 
+    return isNumeric ?
         (
             <StarRating
                 value={book[title] as number ?? 0}
@@ -35,22 +38,31 @@ function AddBookFormInput({book, setBook, title, type } : {
                 }
             />
         )
-        :
-        (
-            <div className="flex flex-col w-80 mx-auto items-center justify-center py-3">
-                <label className="">
-                    {title}
-                </label>
-                <input
-                    type={type}
-                    className="w-full border border-yellow-500/75 rounded-lg"
-                    name={title}
-                    value={book[title] as string}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-        )
+        : title === "shelf" ?
+            (
+                <div className="flex flex-col w-80 mx-auto items-center justify-center py-3">
+                    <label>{title}</label>
+                    <DropdownShelf
+                        value={book.shelf}
+                        onChange={(val) => setBook({ ...book, shelf: val })} />
+                </div>
+            )
+            :
+            (
+                <div className="flex flex-col w-80 mx-auto items-center justify-center py-3">
+                    <label className="">
+                        {title}
+                    </label>
+                    <input
+                        type={type}
+                        className="w-full border border-yellow-500/75 rounded-lg"
+                        name={title}
+                        value={book[title] as string}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+            )
 }
 
 export default AddBookFormInput;

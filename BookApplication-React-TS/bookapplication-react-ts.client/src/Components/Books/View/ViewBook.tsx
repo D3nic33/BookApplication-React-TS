@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import WantToReadOverview from './WantToReadOverview';
-import ReadOverview from './ReadOverview';
+import BookShelf from './ViewBookByShelf';
 
 interface Book {
     id: number;
@@ -9,6 +8,7 @@ interface Book {
     releaseDate: string;
     genre: string;
     rating: number;
+    shelf: string;
 }
 
 function ViewBook() {
@@ -21,12 +21,10 @@ function ViewBook() {
     return (
         <div>
             <div className="py-6">
-                <p className="text-2xl px-4">Want to Read</p>
-                <WantToReadOverview />
+                <BookShelf shelf="want to read" title="Want to Read" />
             </div>
             <div className="py-6">
-                <p className="text-2xl px-4">Read</p>
-                <ReadOverview />
+                <BookShelf shelf="read" title="Read" />
             </div>
         </div>
 

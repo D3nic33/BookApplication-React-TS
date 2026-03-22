@@ -23,6 +23,19 @@ namespace BookApplication_React_TS.Server.Controllers.Books
             return await _context.Book.ToListAsync();
         }
 
+        [HttpGet("shelf/{shelfName}")]
+        public IActionResult GetBookByShelfName(string shelfName)
+        {
+            var books = _context.Book
+                .Where(b => b.Shelf == shelfName)
+                .ToList();
+
+            if (books == null || books.Count == 0)
+                return NotFound($"No books found for shelf: {shelfName}");
+
+            return Ok(books);
+        }
+
         // GET: api/Books/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)

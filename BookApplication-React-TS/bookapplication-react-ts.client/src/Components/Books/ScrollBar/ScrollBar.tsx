@@ -4,10 +4,11 @@ import { useState } from 'react';
 interface Book {
     id: number;
     title: string;
-    author: number;
+    author: string;
     releaseDate: string;
     genre: string;
-    rating: string;
+    rating: number;
+    shelf: string;
 }
 
 function WantToReadOverview() {
