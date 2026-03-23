@@ -23,9 +23,16 @@ const BookShelf = ({ shelf, title }: BookShelfProps) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`/api/books/shelf/${shelf}`)
-            .then((res) => res.json())
-            .then((data) => setBooks(data));
+        fetch(`/api/books/shelf/${shelf}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        })
+            .then((res) => {
+                if (!res.ok) return [];
+                return res.json();
+            })
+            .then((data) => {
+                setBooks(data);
+            });
     }, [shelf]);
 
     if (books.length === 0) return null;

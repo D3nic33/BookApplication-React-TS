@@ -13,5 +13,6 @@
     <Folder Include="src\Components\Popup\" />
     <Folder Include="src\Layouts\" />
     <Folder Include="src\Pages\Home\" />
+    <Folder Include="src\Pages\Login\" />
   </ItemGroup>
 </Project>

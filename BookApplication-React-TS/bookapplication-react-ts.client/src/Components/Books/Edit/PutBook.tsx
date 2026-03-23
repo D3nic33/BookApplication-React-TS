@@ -29,7 +29,9 @@ const EditBook = () => {
 
     // Load existing book data
     useEffect(() => {
-        fetch(`/api/books/${id}`)
+        fetch(`/api/books/${id}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        })
             .then(res => res.json())
             .then(data => setBook({
                 ...data,
@@ -46,7 +48,8 @@ const EditBook = () => {
             method: "PUT",
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem("token")}`
             },
             body: JSON.stringify(book),
         });
