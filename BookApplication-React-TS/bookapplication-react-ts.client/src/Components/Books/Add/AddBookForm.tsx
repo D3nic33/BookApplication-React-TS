@@ -1,26 +1,28 @@
 import { useState } from 'react';
-import '../../App.css';
 import './AddBookFormInput';
 import AddBookFormInput from './AddBookFormInput';
-import SubmitPopup from '../Popup/SubmitPopup';
+import SubmitPopup from '../../Popup/SubmitPopup';
 
 interface Book {
+    id: number;
     title: string;
     author: string;
     releaseDate: Date;
     genre: string;
     rating: number;
+    shelf: string;
 }
 
 function AddBook() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [book, setBook] = useState<Book>({
+        id: 0,
         title: "",
         author: "",
         releaseDate: new Date,
         genre: "",
-        rating: 0.0
-,
+        rating: 0.0,
+        shelf: "",
     });
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -28,7 +30,7 @@ function AddBook() {
 
         addBookData(book);
 
-        setBook({ title: "", author: "", releaseDate: new Date, genre: "", rating: 0.0 });
+        setBook({ id: 0, title: "", author: "", releaseDate: new Date, genre: "", rating: 0.0, shelf: "" });
 
         setIsPopupOpen(true);
     };
@@ -44,6 +46,7 @@ function AddBook() {
                 <AddBookFormInput book={book} setBook={setBook} title="releaseDate" type="Date" />
                 <AddBookFormInput book={book} setBook={setBook} title="genre" type="text" />
                 <AddBookFormInput book={book} setBook={setBook} title="rating" type="number" />
+                <AddBookFormInput book={book} setBook={setBook} title="shelf" type="text" />
 
                 <button className="py-4 bg-orange-400 hover:bg-orange-500 text-white w-80 mx-auto rounded-lg" type="submit">Submit</button>
 

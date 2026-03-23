@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BookApplication_React_TS.Server.Models
 {
@@ -12,8 +11,13 @@ namespace BookApplication_React_TS.Server.Models
 
         [Display(Name = "Release Date")]
         [DataType(DataType.Date)]
+
         public DateTime ReleaseDate { get; set; }
+
         public string Genre { get; set; } = string.Empty;
+
         public double Rating { get; set; } = 0.0;
+
+        public string Shelf { get; set; } = string.Empty;
     }
 }

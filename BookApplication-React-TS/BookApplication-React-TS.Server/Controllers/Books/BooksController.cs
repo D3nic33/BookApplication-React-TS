@@ -7,14 +7,9 @@ namespace BookApplication_React_TS.Server.Controllers.Books
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BooksController : ControllerBase
+    public class BooksController(BookApplication_React_TSServerContext context) : ControllerBase
     {
-        private readonly BookApplication_React_TSServerContext _context;
-
-        public BooksController(BookApplication_React_TSServerContext context)
-        {
-            _context = context;
-        }
+        private readonly BookApplication_React_TSServerContext _context = context;
 
         // GET: api/Books
         [HttpGet]
@@ -35,6 +30,20 @@ namespace BookApplication_React_TS.Server.Controllers.Books
             }
 
             return book;
+        }
+
+        // GET: api/Books/shelf/read
+        [HttpGet("shelf/{shelf}")]
+        public IActionResult GetBookByShelfName(string shelf)
+        {
+            var books = _context.Book
+                .Where(b => b.Shelf == shelf)
+                .ToList();
+
+            if (books == null || books.Count == 0)
+                return NotFound($"No books found for shelf: {shelf}");
+
+            return Ok(books);
         }
 
         // PUT: api/Books/5
