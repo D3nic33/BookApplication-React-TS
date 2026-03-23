@@ -20,13 +20,13 @@ function ViewBook() {
 
     return (
         <div>
-            <div className="py-6">
+            <div className="py-4">
                 <BookShelf shelf="want to read" title="Want to Read" />
             </div>
-            <div className="py-6">
+            <div className="py-4">
                 <BookShelf shelf="read" title="Read" />
             </div>
-            <div className="py-6">
+            <div className="py-4">
                 <BookShelf shelf="did not finish" title="Did not Finish" />
             </div>
         </div>
