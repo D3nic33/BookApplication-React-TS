@@ -61,7 +61,7 @@ dotnet run
 |--------|--------------------------------|---------------------|
 | GET    | `/api/books`                   | Get all books       |
 | GET    | `/api/books/{id}`              | Get book by ID      |
-| GET    | `/api/books/shelf/{shelfName}` | Get book by shelf   |
+| GET    | `/api/books/shelf/{shelfName}` | Get books by shelf  |
 | POST   | `/api/books`                   | Add a new book      |
 | PUT    | `/api/books/{id}`              | Update a book       |
 | DELETE | `/api/books/{id}`              | Delete a book       |
