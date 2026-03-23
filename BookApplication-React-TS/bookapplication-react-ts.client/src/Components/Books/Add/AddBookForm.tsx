@@ -7,7 +7,7 @@ interface Book {
     id: number;
     title: string;
     author: string;
-    releaseDate: string;
+    releaseDate: Date;
     genre: string;
     rating: number;
     shelf: string;
@@ -16,6 +16,7 @@ interface Book {
 function AddBook() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [book, setBook] = useState<Book>({
+        id: 0,
         title: "",
         author: "",
         releaseDate: new Date,
@@ -29,7 +30,7 @@ function AddBook() {
 
         addBookData(book);
 
-        setBook({ title: "", author: "", releaseDate: new Date, genre: "", rating: 0.0, shelf: "" });
+        setBook({ id: 0, title: "", author: "", releaseDate: new Date, genre: "", rating: 0.0, shelf: "" });
 
         setIsPopupOpen(true);
     };

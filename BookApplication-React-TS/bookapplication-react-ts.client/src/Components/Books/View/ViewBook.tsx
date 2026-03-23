@@ -5,7 +5,7 @@ interface Book {
     id: number;
     title: string;
     author: string;
-    releaseDate: string;
+    releaseDate: Date;
     genre: string;
     rating: number;
     shelf: string;
@@ -26,8 +26,10 @@ function ViewBook() {
             <div className="py-6">
                 <BookShelf shelf="read" title="Read" />
             </div>
+            <div className="py-6">
+                <BookShelf shelf="did not finish" title="Did not Finish" />
+            </div>
         </div>
-
     );
 
     async function populateBookData() {

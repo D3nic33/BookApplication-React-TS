@@ -1,19 +1,13 @@
-import { useRef } from 'react';
-import { useState } from 'react';
+﻿import { useRef } from 'react';
 
-interface Book {
-    id: number;
-    title: string;
-    author: string;
-    releaseDate: string;
-    genre: string;
-    rating: number;
-    shelf: string;
+interface ScrollBarProps<T> {
+    items: T[];
+    renderItem: (item: T) => React.ReactNode;
+    keyExtractor: (item: T) => string | number;
 }
 
-function WantToReadOverview() {
+function ScrollBar<T>({ items, renderItem, keyExtractor }: ScrollBarProps<T>) {
     const scrollRef = useRef<HTMLDivElement>(null);
-    const [books] = useState<Book[]>([]);
 
     const scroll = (direction: "left" | "right") => {
         scrollRef.current?.scrollBy({
@@ -30,7 +24,7 @@ function WantToReadOverview() {
                 onClick={() => scroll("left")}
                 className="absolute left-0 z-10 bg-orange-500 hover:bg-orange-600 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl shadow-md"
             >
-
+                ‹
             </button>
 
             {/* Scrollable list */}
@@ -38,11 +32,9 @@ function WantToReadOverview() {
                 ref={scrollRef}
                 className="flex gap-4 overflow-x-auto scroll-smooth scrollbar-hide px-12 py-4 w-full"
             >
-                {books.map((book) => (
-                    <div key={book.id} className="flex flex-col items-center min-w-28">
-                        <div className="w-28 h-44 bg-gray-200 rounded-lg shadow-md" />
-                        <p className="text-center mt-2 text-sm font-medium">{book.title}</p>
-                        <p className="text-center text-sm text-gray-500">{book.author}</p>
+                {items.map((item) => (
+                    <div key={keyExtractor(item)}>
+                        {renderItem(item)}
                     </div>
                 ))}
             </div>
@@ -52,10 +44,11 @@ function WantToReadOverview() {
                 onClick={() => scroll("right")}
                 className="absolute right-0 z-10 bg-orange-500 hover:bg-orange-600 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl shadow-md"
             >
+                ›
             </button>
 
         </div>
     );
 }
 
-export default WantToReadOverview
+export default ScrollBar

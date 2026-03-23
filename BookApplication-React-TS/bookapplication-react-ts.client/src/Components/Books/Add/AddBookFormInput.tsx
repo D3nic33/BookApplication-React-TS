@@ -5,7 +5,7 @@ interface Book {
     id: number;
     title: string;
     author: string;
-    releaseDate: string;
+    releaseDate: Date;
     genre: string;
     rating: number;
     shelf: string;
