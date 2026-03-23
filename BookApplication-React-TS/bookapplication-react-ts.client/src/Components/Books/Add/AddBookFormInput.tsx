@@ -5,11 +5,12 @@ interface Book {
     id: number;
     title: string;
     author: string;
-    releaseDate: Date;
+    releaseDate: string;
     genre: string;
     rating: number;
     shelf: string;
 }
+
 function AddBookFormInput({book, setBook, title, type } : {
     book: Book,
     setBook: React.Dispatch<React.SetStateAction<Book>>,

@@ -9,7 +9,7 @@ const StarRating = ({ rating, max = 5 }: StarRatingProps) => {
         {
             Array.from({ length: max }, (_, i) => {
                 const full = i + 1 <= rating;
-                const half = !full && i + 0.5 < rating;
+                const half = !full && i + 0.5 <= rating;
 
                 return (
                     <svg
