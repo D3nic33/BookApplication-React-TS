@@ -57,13 +57,14 @@ dotnet run
 
 ## 🔌 API Endpoints
 
-| Method | Endpoint          | Description     |
-|--------|-------------------|-----------------|
-| GET    | `/api/books`      | Get all books   |
-| GET    | `/api/books/{id}` | Get book by ID  |
-| POST   | `/api/books`      | Add a new book  |
-| PUT    | `/api/books/{id}` | Update a book   |
-| DELETE | `/api/books/{id}` | Delete a book   |
+| Method | Endpoint                       | Description         |
+|--------|--------------------------------|---------------------|
+| GET    | `/api/books`                   | Get all books       |
+| GET    | `/api/books/{id}`              | Get book by ID      |
+| GET    | `/api/books/shelf/{shelfName}` | Get book by shelf   |
+| POST   | `/api/books`                   | Add a new book      |
+| PUT    | `/api/books/{id}`              | Update a book       |
+| DELETE | `/api/books/{id}`              | Delete a book       |
 
 ---
 
