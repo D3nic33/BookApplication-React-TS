@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 
@@ -90,113 +90,149 @@ const EditProfile = () => {
         }
     };
 
+    const inputClass = "border border-orange-100 bg-amber-50 rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-orange-300 transition";
+    const labelClass = "text-sm font-medium text-stone-600";
+
     return (
-        <div className="flex flex-col items-center py-8 gap-6">
-            <h2 className="text-2xl font-bold">My Profile</h2>
+        <div className="min-h-screen bg-amber-50 px-6 py-12">
 
-            {/* Profile Info */}
-            <div className="flex flex-col w-80 gap-4">
-                <h3 className="text-lg font-semibold">Profile Info</h3>
-
-                <div className="flex flex-col gap-1">
-                    <label className="capitalize text-sm font-medium">Username</label>
-                    <input
-                        className="border rounded-lg px-3 py-2 w-full"
-                        value={profile.username}
-                        onChange={e => setProfile({ ...profile, username: e.target.value })}
-                    />
-                </div>
-
-                <div className="flex flex-col gap-1">
-                    <label className="capitalize text-sm font-medium">Email</label>
-                    <input
-                        className="border rounded-lg px-3 py-2 w-full"
-                        value={profile.email}
-                        onChange={e => setProfile({ ...profile, email: e.target.value })}
-                    />
-                </div>
-
-                <div className="flex flex-col gap-1">
-                    <label className="capitalize text-sm font-medium">Bio</label>
-                    <textarea
-                        className="border rounded-lg px-3 py-2 w-full resize-none"
-                        rows={3}
-                        maxLength={500}
-                        value={profile.bio}
-                        onChange={e => setProfile({ ...profile, bio: e.target.value })}
-                    />
-                    <span className="text-xs text-gray-400 text-right">{profile.bio.length}/500</span>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                    <label className="capitalize text-sm font-medium">Reading Goal (books per year)</label>
-                    <input
-                        type="number"
-                        min={1}
-                        className="border rounded-lg px-3 py-2 w-full"
-                        placeholder="e.g. 12"
-                        value={profile.readingGoal ?? ""}
-                        onChange={e => setProfile({ ...profile, readingGoal: e.target.value ? parseInt(e.target.value) : null })}
-                    />
-                </div>
-
-                {profileError && <p className="text-red-500 text-sm">{profileError}</p>}
-                {profileSuccess && <p className="text-green-500 text-sm">{profileSuccess}</p>}
-
-                <button
-                    className="py-3 bg-orange-400 hover:bg-orange-500 text-white rounded-lg"
-                    onClick={handleSaveProfile}
-                >
-                    Save Profile
-                </button>
+            {/* Page header */}
+            <div className="max-w-xl mx-auto mb-8">
+                <span className="inline-block bg-orange-100 text-orange-500 text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-3">
+                    Account
+                </span>
+                <h1 className="text-4xl font-bold text-stone-800 leading-tight">
+                    Edit Profile ✏️
+                </h1>
+                <p className="text-stone-400 mt-2 text-sm">Update your personal info and password below.</p>
             </div>
 
-            <hr className="w-80 border-gray-200" />
+            {/* Profile Info Card */}
+            <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-8 mb-6">
+                <h3 className="text-lg font-bold text-stone-800 mb-5">Profile Info</h3>
 
-            {/* Change Password */}
-            <div className="flex flex-col w-80 gap-4">
-                <h3 className="text-lg font-semibold">Change Password</h3>
+                <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-1">
+                        <label className={labelClass}>Username</label>
+                        <input
+                            className={inputClass}
+                            value={profile.username}
+                            onChange={e => setProfile({ ...profile, username: e.target.value })}
+                        />
+                    </div>
 
-                <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium">Current Password</label>
-                    <input
-                        type="password"
-                        className="border rounded-lg px-3 py-2 w-full"
-                        value={currentPassword}
-                        onChange={e => setCurrentPassword(e.target.value)}
-                    />
+                    <div className="flex flex-col gap-1">
+                        <label className={labelClass}>Email</label>
+                        <input
+                            className={inputClass}
+                            value={profile.email}
+                            onChange={e => setProfile({ ...profile, email: e.target.value })}
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <label className={labelClass}>Bio</label>
+                        <textarea
+                            className={`${inputClass} resize-none`}
+                            rows={3}
+                            maxLength={500}
+                            value={profile.bio}
+                            onChange={e => setProfile({ ...profile, bio: e.target.value })}
+                        />
+                        <span className="text-xs text-stone-400 text-right">{profile.bio.length}/500</span>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <label className={labelClass}>Reading Goal <span className="text-stone-400 font-normal">(books per year)</span></label>
+                        <input
+                            type="number"
+                            min={1}
+                            className={inputClass}
+                            placeholder="e.g. 12"
+                            value={profile.readingGoal ?? ""}
+                            onChange={e => setProfile({ ...profile, readingGoal: e.target.value ? parseInt(e.target.value) : null })}
+                        />
+                    </div>
+
+                    {profileError && (
+                        <p className="text-red-400 text-sm bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+                            ⚠️ {profileError}
+                        </p>
+                    )}
+                    {profileSuccess && (
+                        <p className="text-green-600 text-sm bg-green-50 border border-green-100 rounded-xl px-3 py-2">
+                            ✅ {profileSuccess}
+                        </p>
+                    )}
+
+                    <div className="h-px bg-orange-100 my-1" />
+
+                    <button
+                        className="w-full bg-orange-400 hover:bg-orange-500 active:bg-orange-600 text-white font-semibold py-3 rounded-full shadow transition-all"
+                        onClick={handleSaveProfile}
+                    >
+                        Save Profile
+                    </button>
                 </div>
-
-                <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium">New Password</label>
-                    <input
-                        type="password"
-                        className="border rounded-lg px-3 py-2 w-full"
-                        value={newPassword}
-                        onChange={e => setNewPassword(e.target.value)}
-                    />
-                </div>
-
-                <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium">Confirm New Password</label>
-                    <input
-                        type="password"
-                        className="border rounded-lg px-3 py-2 w-full"
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                    />
-                </div>
-
-                {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
-                {passwordSuccess && <p className="text-green-500 text-sm">{passwordSuccess}</p>}
-
-                <button
-                    className="py-3 bg-orange-400 hover:bg-orange-500 text-white rounded-lg"
-                    onClick={handleChangePassword}
-                >
-                    Change Password
-                </button>
             </div>
+
+            {/* Change Password Card */}
+            <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-8">
+                <h3 className="text-lg font-bold text-stone-800 mb-5">Change Password 🔒</h3>
+
+                <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-1">
+                        <label className={labelClass}>Current Password</label>
+                        <input
+                            type="password"
+                            className={inputClass}
+                            value={currentPassword}
+                            onChange={e => setCurrentPassword(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <label className={labelClass}>New Password</label>
+                        <input
+                            type="password"
+                            className={inputClass}
+                            value={newPassword}
+                            onChange={e => setNewPassword(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <label className={labelClass}>Confirm New Password</label>
+                        <input
+                            type="password"
+                            className={inputClass}
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
+                        />
+                    </div>
+
+                    {passwordError && (
+                        <p className="text-red-400 text-sm bg-red-50 border border-red-100 rounded-xl px-3 py-2">
+                            ⚠️ {passwordError}
+                        </p>
+                    )}
+                    {passwordSuccess && (
+                        <p className="text-green-600 text-sm bg-green-50 border border-green-100 rounded-xl px-3 py-2">
+                            ✅ {passwordSuccess}
+                        </p>
+                    )}
+
+                    <div className="h-px bg-orange-100 my-1" />
+
+                    <button
+                        className="w-full bg-orange-400 hover:bg-orange-500 active:bg-orange-600 text-white font-semibold py-3 rounded-full shadow transition-all"
+                        onClick={handleChangePassword}
+                    >
+                        Change Password
+                    </button>
+                </div>
+            </div>
+
         </div>
     );
 };

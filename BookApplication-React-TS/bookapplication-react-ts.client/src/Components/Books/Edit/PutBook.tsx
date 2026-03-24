@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import PutBookFormField from "./PutBookFormField";
 import DropdownShelf from "../Add/DropDownShelf";
@@ -13,6 +13,7 @@ interface Book {
     genre: string;
     rating: number;
     shelf: string;
+    description: string;
 }
 
 const EditBook = () => {
@@ -27,9 +28,9 @@ const EditBook = () => {
         genre: "",
         rating: 0,
         shelf: "",
+        description: "",
     });
 
-    // Load existing book data
     useEffect(() => {
         fetch(`/api/books/${id}`, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -55,47 +56,83 @@ const EditBook = () => {
             },
             body: JSON.stringify(book),
         });
-        navigate("/bookOverview"); // Go back to list after saving
+        navigate("/books");
     };
 
     return (
-        <div className="flex flex-col items-center py-8">
-            <h2 className="text-xl font-bold mb-4">Edit Book</h2>
+        <div className="min-h-screen bg-amber-50 px-6 py-12">
 
-            <PutBookFormField label="title" name="title" value={book.title} onChange={handleChange} />
-            <PutBookFormField label="author" name="author" value={book.author} onChange={handleChange} />
-            <PutBookFormField label="genre" name="genre" value={book.genre} onChange={handleChange} />
-            <PutBookFormField label="release date" name="releaseDate" value={book.releaseDate} onChange={handleChange} type="date" />
-
-            <div className="flex flex-col w-80 mx-auto items-center justify-center py-3">
-                <label className="capitalize">shelf</label>
-                <DropdownShelf
-                    value={book.shelf}
-                    onChange={(val) => setBook({ ...book, shelf: val })}
-                />
+            {/* Back link */}
+            <div className="max-w-xl mx-auto mb-6">
+                <button
+                    onClick={() => navigate(-1)}
+                    className="text-orange-400 hover:text-orange-500 text-sm font-medium flex items-center gap-1 transition-colors"
+                >
+                    ← Back
+                </button>
             </div>
 
-            {book.shelf.toLowerCase() === "read" && (
-                <div className="flex flex-col w-80 mx-auto items-center justify-center py-3">
-                    <StarRating
-                        value={book.rating}
-                        onChange={(val: number) => setBook({ ...book, rating: val })}
-                    />
-                </div>
-            )}
+            {/* Page header */}
+            <div className="max-w-xl mx-auto mb-8">
+                <span className="inline-block bg-orange-100 text-orange-500 text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-3">
+                    Your Library
+                </span>
+                <h1 className="text-4xl font-bold text-stone-800 leading-tight">
+                    Edit Book ✏️
+                </h1>
+                <p className="text-stone-400 mt-2 text-sm">Update the details of your book below.</p>
+            </div>
 
-            <button
-                className="py-4 bg-orange-400 hover:bg-orange-500 text-white w-80 mx-auto rounded-lg mt-2"
-                onClick={handleSave}
-            >
-                Save
-            </button>
-            <button
-                className="py-4 bg-gray-200 hover:bg-gray-300 text-gray-700 w-80 mx-auto rounded-lg mt-2"
-                onClick={() => navigate("/bookOverview")}
-            >
-                Cancel
-            </button>
+            {/* Card */}
+            <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-8">
+                <div className="flex flex-col gap-5">
+
+                    <PutBookFormField label="title" name="title" value={book.title} onChange={handleChange} />
+                    <PutBookFormField label="author" name="author" value={book.author} onChange={handleChange} />
+                    <PutBookFormField label="genre" name="genre" value={book.genre} onChange={handleChange} />
+                    <PutBookFormField label="release date" name="releaseDate" value={book.releaseDate} onChange={handleChange} type="date" />
+
+                    {/* Shelf dropdown */}
+                    <div className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-stone-600 capitalize">Shelf</label>
+                        <DropdownShelf
+                            value={book.shelf}
+                            onChange={(val) => setBook({ ...book, shelf: val })}
+                        />
+                    </div>
+
+                    {/* Star rating — only for read books */}
+                    {book.shelf.toLowerCase() === "read" && (
+                        <div className="flex flex-col gap-1">
+                            <label className="text-sm font-medium text-stone-600">Your Rating</label>
+                            <StarRating
+                                value={book.rating}
+                                onChange={(val: number) => setBook({ ...book, rating: val })}
+                            />
+                        </div>
+                    )}
+
+                    <div className="h-px bg-orange-100 my-1" />
+
+                    {/* Actions */}
+                    <div className="flex gap-3">
+                        <button
+                            className="flex-1 bg-orange-400 hover:bg-orange-500 active:bg-orange-600 text-white font-semibold py-3 rounded-full shadow transition-all"
+                            onClick={handleSave}
+                        >
+                            Save Changes
+                        </button>
+                        <button
+                            className="flex-1 bg-white border-2 border-orange-200 text-orange-400 hover:bg-orange-50 font-semibold py-3 rounded-full transition-all"
+                            onClick={() => navigate(-1)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     );
 };

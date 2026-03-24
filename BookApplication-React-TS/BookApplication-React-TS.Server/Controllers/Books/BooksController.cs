@@ -38,11 +38,11 @@ namespace BookApplication_React_TS.Server.Controllers.Books
         public IActionResult GetBookByShelfName(string shelf)
         {
             var books = _context.Book
-                .Where(b => b.Shelf.ToLower() == shelf.ToLower() && b.UserId == GetUserId())
+                .Where(b => b.Shelf != null && b.Shelf.ToLower() == shelf.ToLower() && b.UserId == GetUserId())
                 .ToList();
 
             if (books == null || books.Count == 0)
-                return Ok(new List<Book>()); // return empty array instead of 404
+                return Ok(new List<Book>());
 
             return Ok(books);
         }

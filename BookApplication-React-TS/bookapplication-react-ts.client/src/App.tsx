@@ -8,6 +8,7 @@ import Login from './Pages/Login/Login.tsx';
 import EditProfile from './Pages/Profile/EditProfilePage.tsx';
 import Profile from './Pages/Profile/ProfilePage.tsx';
 import PrivateRoute from './Components/Menu/PrivateRoute.tsx';
+import BookDetail from './Components/Books/View/BookDetail.tsx';
 
 function App() {
     return (
@@ -41,6 +42,11 @@ function App() {
                 <Route path="/books/:id/edit" element={
                     <PrivateRoute>
                         <EditBook />
+                    </PrivateRoute>
+                } />
+                <Route path="/books/:id" element={
+                    <PrivateRoute>
+                        <BookDetail />
                     </PrivateRoute>
                 } />
             </Routes>
