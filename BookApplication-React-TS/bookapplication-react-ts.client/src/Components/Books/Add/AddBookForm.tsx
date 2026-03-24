@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './AddBookFormInput';
 import AddBookFormInput from './AddBookFormInput';
 import SubmitPopup from '../../Popup/SubmitPopup';
+import { useAuth } from '../../../Context/AuthContext';
 
 interface Book {
     id: number;
@@ -14,8 +15,9 @@ interface Book {
 }
 
 function AddBook() {
+    const { token } = useAuth();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [book, setBook] = useState<Book>({
+    const [newBook, setNewBook] = useState<Book>({
         id: 0,
         title: "",
         author: "",
@@ -25,12 +27,14 @@ function AddBook() {
         shelf: "",
     });
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault(); // Prevent default form submission behavior
 
-        addBookData(book);
-
-        setBook({ id: 0, title: "", author: "", releaseDate: "", genre: "", rating: 0.0, shelf: "" });
+        if (!token) return; {
+            await addBookData(newBook, token);
+        }
+        
+        setNewBook({ id: 0, title: "", author: "", releaseDate: "", genre: "", rating: 0.0, shelf: "" });
 
         setIsPopupOpen(true);
     };
@@ -41,14 +45,14 @@ function AddBook() {
                 onSubmit={handleSubmit}
                 className="flex flex-col"
             >
-                <AddBookFormInput book={book} setBook={setBook} title="title" type="text" />
-                <AddBookFormInput book={book} setBook={setBook} title="author" type="text" />
-                <AddBookFormInput book={book} setBook={setBook} title="releaseDate" type="Date" />
-                <AddBookFormInput book={book} setBook={setBook} title="genre" type="text" />
-                <AddBookFormInput book={book} setBook={setBook} title="shelf" type="text" />
+                <AddBookFormInput book={newBook} setBook={setNewBook} title="title" type="text" />
+                <AddBookFormInput book={newBook} setBook={setNewBook} title="author" type="text" />
+                <AddBookFormInput book={newBook} setBook={setNewBook} title="releaseDate" type="Date" />
+                <AddBookFormInput book={newBook} setBook={setNewBook} title="genre" type="text" />
+                <AddBookFormInput book={newBook} setBook={setNewBook} title="shelf" type="text" />
 
-                {book.shelf.toLowerCase() === "read" && (
-                    <AddBookFormInput book={book} setBook={setBook} title="rating" type="number" />
+                {newBook.shelf.toLowerCase() === "read" && (
+                    <AddBookFormInput book={newBook} setBook={setNewBook} title="rating" type="number" />
                 )}
 
                 <button className="py-4 bg-orange-400 hover:bg-orange-500 text-white w-80 mx-auto rounded-lg" type="submit">Submit</button>
@@ -63,14 +67,15 @@ function AddBook() {
         </div>
     );
 
-    async function addBookData(newbook: Book) {
+    async function addBookData(newBook: Book, token: string) {
         await fetch('api/Books', {
             method: "post",
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json' 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(newbook)
+            body: JSON.stringify(newBook)
         });
     }
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import BookShelf from './ViewBookByShelf';
+import { useAuth } from '../../../Context/AuthContext';
 
 interface Book {
     id: number;
@@ -12,6 +13,7 @@ interface Book {
 }
 
 function ViewBook() {
+    const { token } = useAuth();
     const [books, setBooks] = useState<Book[]>([]);
 
     useEffect(() => {
@@ -37,7 +39,8 @@ function ViewBook() {
             method: "get",
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
         });
         if (response.ok) {

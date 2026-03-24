@@ -1,18 +1,19 @@
-import type { ReactNode } from 'react';
-import Menu from '../Components/Menu/Menu.tsx';
+import { type ReactNode } from 'react';
+import Menu from '../Components/Menu/Menu';
 
 interface Props {
-    children: ReactNode
+    children: ReactNode;
 }
 
-const DefaultLayout = ({ children }: Props) => (
-    <div>
-        <Menu />
-
+function DefaultLayout({ children }: Props) {
+    return (
         <div>
-            {children}
+            <Menu />
+            <div>
+                {children}
+            </div>
         </div>
-    </div>
-)
+    );
+}
 
 export default DefaultLayout;
