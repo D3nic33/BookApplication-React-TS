@@ -20,7 +20,10 @@ namespace BookApplication_React_TS.Server.Models
 
         public string Shelf { get; set; } = string.Empty;
 
+        public string Description { get; set; } = string.Empty;
+
         public int UserId { get; set; }
+
         public User? User { get; set; }
     }
 }

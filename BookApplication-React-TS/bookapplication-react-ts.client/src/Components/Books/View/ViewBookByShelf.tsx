@@ -12,6 +12,7 @@ interface Book {
     genre: string;
     rating: number;
     shelf: string;
+    description: string;
 }
 
 interface BookShelfProps {
@@ -52,9 +53,9 @@ const BookShelf = ({ shelf, title }: BookShelfProps) => {
                 renderItem={(book) => (
                     <div key={book.id}
                         className="flex flex-col items-center min-w-28 cursor-pointer"
-                        onClick={() => navigate(`/books/${book.id}/edit`)}
+                        onClick={() => navigate(`/books/${book.id}`)}
                     >
-                        <div className="w-28 h-44 bg-gray-200 rounded-lg shadow-md" />
+                        <div className="w-28 h-44 bg-white/50 rounded-lg shadow-md" />
                         <p className="text-center mt-2 text-sm font-medium">{book.title}</p>
                         <p className="text-center text-sm text-gray-500">{book.author}</p>
 

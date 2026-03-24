@@ -9,6 +9,7 @@ interface Book {
     genre: string;
     rating: number;
     shelf: string;
+    description: string;
 }
 
 function AddBookFormInput({book, setBook, title, type } : {
@@ -58,7 +59,7 @@ function AddBookFormInput({book, setBook, title, type } : {
                         type={type}
                         className="w-full border border-yellow-500/75 rounded-lg"
                         name={title}
-                        value={book[title] as string}
+                        value={(book[title] ?? "") as string} 
                         onChange={handleChange}
                         required
                     />
