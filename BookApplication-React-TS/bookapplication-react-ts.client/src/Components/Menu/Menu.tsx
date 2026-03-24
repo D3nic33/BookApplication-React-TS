@@ -1,17 +1,18 @@
 import { useState } from 'react';
+import { useAuth } from '../../Context/AuthContext';
 
 const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Book Overview', href: "/bookOverview" },
-    { name: 'Add Book', href: "/addBook" },
+    { name: 'Book Overview', href: "/books" },
+    { name: 'Add Book', href: "/books/add" },
 ]
 
-const Menu = ({ isLoggedIn, setIsLoggedIn }: { isLoggedIn: boolean, setIsLoggedIn: (v: boolean) => void }) => {
+const Menu = () => {
+    const { isLoggedIn, logout } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        setIsLoggedIn(false);
+        logout();
         window.location.href = '/';
     };
 
@@ -22,7 +23,6 @@ const Menu = ({ isLoggedIn, setIsLoggedIn }: { isLoggedIn: boolean, setIsLoggedI
                     <a className="text-white p-6 hover:bg-orange-300" key={item.name} href={item.href}>{item.name}</a>
                 ))}
             </div>
-
             {isLoggedIn ? (
                 <div
                     className="relative"
@@ -35,7 +35,6 @@ const Menu = ({ isLoggedIn, setIsLoggedIn }: { isLoggedIn: boolean, setIsLoggedI
                             <path d="M2 4l4 4 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                         </svg>
                     </a>
-
                     {dropdownOpen && (
                         <div className="absolute right-0 top-full bg-white border border-stone-200 rounded-xl shadow-md min-w-36 z-50 py-1">
                             <a href="/profile" className="block px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50">

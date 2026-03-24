@@ -1,20 +1,18 @@
-import type { ReactNode } from 'react';
-import Menu from '../Components/Menu/Menu.tsx';
-import { useState } from 'react';
+import { type ReactNode } from 'react';
+import Menu from '../Components/Menu/Menu';
 
 interface Props {
-    children: ReactNode
+    children: ReactNode;
 }
-function DefaultLayout({ children }: Props) {
-    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
 
+function DefaultLayout({ children }: Props) {
     return (
-        <>
-            <Menu isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <div>
+            <Menu />
             <div>
                 {children}
             </div>
-        </>
+        </div>
     );
 }
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../Context/AuthContext";
 
 interface UserProfile {
     id: number;
@@ -10,6 +11,7 @@ interface UserProfile {
 }
 
 const EditProfile = () => {
+    const { token } = useAuth();
     const navigate = useNavigate();
     const [profile, setProfile] = useState<UserProfile>({
         id: 0, username: "", email: "", bio: "", readingGoal: null,
@@ -24,13 +26,19 @@ const EditProfile = () => {
 
     useEffect(() => {
         fetch("/api/user/me", {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            headers: { 'Authorization': `Bearer ${token}` }
         })
             .then(res => {
-                if (res.status === 401) { navigate("/login"); return null; }
+                if (res.status === 401) {
+                    navigate("/login"); return null;
+                }
                 return res.json();
             })
-            .then(data => { if (data) setProfile({ ...data, bio: data.bio ?? "" }); });
+            .then(data => {
+                if (data) {
+                    setProfile({ ...data, bio: data.bio ?? "" });
+                }
+            });
     }, []);
 
     const handleSaveProfile = async () => {
@@ -39,7 +47,7 @@ const EditProfile = () => {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
                 username: profile.username,
@@ -57,21 +65,25 @@ const EditProfile = () => {
     };
 
     const handleChangePassword = async () => {
-        setPasswordError(""); setPasswordSuccess("");
+        setPasswordError("");
+        setPasswordSuccess("");
         if (newPassword !== confirmPassword) {
-            setPasswordError("New passwords do not match."); return;
+            setPasswordError("New passwords do not match.");
+            return;
         }
         const res = await fetch("/api/user/me/password", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({ currentPassword, newPassword }),
         });
         if (res.ok) {
             setPasswordSuccess("Password changed successfully!");
-            setCurrentPassword(""); setNewPassword(""); setConfirmPassword("");
+            setCurrentPassword("");
+            setNewPassword("");
+            setConfirmPassword("");
         } else {
             const err = await res.json();
             setPasswordError(err.message ?? "Something went wrong.");

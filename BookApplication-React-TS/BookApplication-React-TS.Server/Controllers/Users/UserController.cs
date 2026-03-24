@@ -77,8 +77,12 @@ namespace BookApplication_React_TS.Server.Controllers.Users
         {
             byte[] salt = RandomNumberGenerator.GetBytes(16);
             byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
-                Encoding.UTF8.GetBytes(password), salt,
-                iterations: 100_000, HashAlgorithmName.SHA256, outputLength: 32);
+                Encoding.UTF8.GetBytes(password),
+                salt,
+                iterations: 600_000,
+                HashAlgorithmName.SHA256,
+                outputLength: 32
+            );
             return $"{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
         }
 
@@ -89,8 +93,12 @@ namespace BookApplication_React_TS.Server.Controllers.Users
             byte[] salt = Convert.FromBase64String(parts[0]);
             byte[] expected = Convert.FromBase64String(parts[1]);
             byte[] actual = Rfc2898DeriveBytes.Pbkdf2(
-                Encoding.UTF8.GetBytes(password), salt,
-                iterations: 100_000, HashAlgorithmName.SHA256, outputLength: 32);
+                Encoding.UTF8.GetBytes(password),
+                salt,
+                iterations: 600_000,
+                HashAlgorithmName.SHA256,
+                outputLength: 32
+            );
             return CryptographicOperations.FixedTimeEquals(actual, expected);
         }
     }

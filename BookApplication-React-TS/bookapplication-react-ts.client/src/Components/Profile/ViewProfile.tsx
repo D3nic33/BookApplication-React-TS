@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../Context/AuthContext";
 
 interface UserProfile {
     id: number;
@@ -10,6 +11,7 @@ interface UserProfile {
 }
 
 const ViewProfile = () => {
+    const { token } = useAuth();
     const navigate = useNavigate();
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
@@ -17,19 +19,23 @@ const ViewProfile = () => {
 
     useEffect(() => {
         fetch("/api/user/me", {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            headers: { 'Authorization': `Bearer ${token}` }
         })
             .then(res => {
-                if (res.status === 401) { navigate("/login"); return null; }
+                if (res.status === 401) {
+                    navigate("/login"); return null;
+                }
                 return res.json();
             })
             .then(data => {
-                if (data) setProfile({ ...data, bio: data.bio ?? "" });
+                if (data) {
+                    setProfile({ ...data, bio: data.bio ?? "" });
+                }
                 setLoading(false);
             });
 
         fetch("/api/user/me/books/read/count", {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            headers: { 'Authorization': `Bearer ${token}` }
         })
             .then(res => res.json())
             .then(data => setBooksRead(data.count));

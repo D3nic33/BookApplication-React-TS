@@ -66,7 +66,10 @@ function Login() {
                     <div className="flex bg-stone-100 rounded-xl p-1 mb-7">
                         <button
                             type="button"
-                            onClick={() => { setMode('login'); setError(''); }}
+                            onClick={() => {
+                                setMode('login');
+                                setError('');
+                            }}
                             className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${mode === 'login'
                                     ? 'bg-white text-stone-800 shadow-sm'
                                     : 'text-stone-500 hover:text-stone-700'
@@ -76,7 +79,10 @@ function Login() {
                         </button>
                         <button
                             type="button"
-                            onClick={() => { setMode('register'); setError(''); }}
+                            onClick={() => {
+                                setMode('register');
+                                setError('');
+                            }}
                             className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${mode === 'register'
                                     ? 'bg-white text-stone-800 shadow-sm'
                                     : 'text-stone-500 hover:text-stone-700'

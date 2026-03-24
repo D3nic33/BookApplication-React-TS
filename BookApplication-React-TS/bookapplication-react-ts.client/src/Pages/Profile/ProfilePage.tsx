@@ -1,7 +1,7 @@
 import ViewProfile from "../../Components/Profile/ViewProfile";
 import DefaultLayout from "../../Layouts/DefaultLayout";
 
-function EditBook() {
+function ProfilePage() {
     return (
         <div>
             <DefaultLayout>
@@ -11,4 +11,4 @@ function EditBook() {
     );
 }
 
-export default EditBook;
+export default ProfilePage;

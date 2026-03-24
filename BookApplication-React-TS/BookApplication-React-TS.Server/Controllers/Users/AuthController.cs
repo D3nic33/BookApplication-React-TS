@@ -24,11 +24,15 @@ namespace BookApplication_React_TS.Server.Controllers.Users
         {
             // Check if email is already taken
             if (await _db.User.AnyAsync(u => u.Email == dto.Email))
+            {
                 return BadRequest(new { message = "An account with this email already exists." });
+            }
 
             // Check if username is already taken
             if (await _db.User.AnyAsync(u => u.Username == dto.Username))
+            {
                 return BadRequest(new { message = "This username is already taken." });
+            }
 
             var user = new User
             {
@@ -49,7 +53,9 @@ namespace BookApplication_React_TS.Server.Controllers.Users
             var user = await _db.User.FirstOrDefaultAsync(u => u.Email == dto.Email);
 
             if (user is null || !VerifyPassword(dto.Password, user.PasswordHash))
+            {
                 return Unauthorized(new { message = "Invalid email or password." });
+            }
 
             return Ok(new AuthResponseDto(GenerateJwt(user)));
         }
@@ -98,16 +104,16 @@ namespace BookApplication_React_TS.Server.Controllers.Users
 
             var claims = new[]
             {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Name, user.Username),
-        };
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.Username),
+            };
 
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(7),
+                expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: creds
             );
 

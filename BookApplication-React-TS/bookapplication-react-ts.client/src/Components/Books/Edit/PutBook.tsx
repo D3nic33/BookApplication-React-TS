@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import PutBookFormField from "./PutBookFormField";
 import DropdownShelf from "../Add/DropDownShelf";
 import StarRating from "../../Rating/StarRating";
+import { useAuth } from "../../../Context/AuthContext";
 
 interface Book {
     id: number;
@@ -15,6 +16,7 @@ interface Book {
 }
 
 const EditBook = () => {
+    const { token } = useAuth();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [book, setBook] = useState<Book>({
@@ -30,7 +32,7 @@ const EditBook = () => {
     // Load existing book data
     useEffect(() => {
         fetch(`/api/books/${id}`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            headers: { 'Authorization': `Bearer ${token}` }
         })
             .then(res => res.json())
             .then(data => setBook({
@@ -49,7 +51,7 @@ const EditBook = () => {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem("token")}`
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(book),
         });

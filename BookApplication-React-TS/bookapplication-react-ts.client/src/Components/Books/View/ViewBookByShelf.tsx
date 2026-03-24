@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import StarRatingShow from '../../Rating/StarRatingShow';
 import ScrollBar from '../ScrollBar/ScrollBar';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../Context/AuthContext';
 
 interface Book {
     id: number;
@@ -19,12 +20,13 @@ interface BookShelfProps {
 }
 
 const BookShelf = ({ shelf, title }: BookShelfProps) => {
+    const { token } = useAuth();
     const [books, setBooks] = useState<Book[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`/api/books/shelf/${shelf}`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            headers: { 'Authorization': `Bearer ${token}` }
         })
             .then((res) => {
                 if (!res.ok) return [];
