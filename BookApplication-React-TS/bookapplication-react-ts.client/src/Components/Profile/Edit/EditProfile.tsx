@@ -51,7 +51,7 @@ const EditProfile = () => {
             </div>
 
             {/* Profile Info Card */}
-            <EditProfileInformation />
+            <EditProfileInformation profile={profile} setProfile={setProfile} />
 
             {/* Change Password Card */}
             <EditProfilePassword />

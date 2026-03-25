@@ -1,4 +1,5 @@
-﻿using BookApplication_React_TS.Server.Data;
+﻿using BookApplication_React_TS.Server.Controllers.Books;
+using BookApplication_React_TS.Server.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -30,6 +31,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             )
         };
     });
+
+builder.Services.AddHttpClient<GoogleBooksController>();
 
 var app = builder.Build();
 

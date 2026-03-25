@@ -5,6 +5,7 @@ const navigation = [
     { name: 'Library', href: "/books" },
     { name: 'Add a Book', href: "/books/add" },
     { name: 'Find a friend', href: "/users" },
+    { name: 'Find a book', href:"/books/search"}
 ];
 
 const Menu = () => {

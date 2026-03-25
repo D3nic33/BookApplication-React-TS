@@ -15,6 +15,12 @@ namespace BookApplication_React_TS.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Book>(entity =>
+            {
+                entity.Property(b => b.Description).HasColumnType("nvarchar(max)");
+                entity.Property(b => b.CoverUrl).HasMaxLength(500);
+            });
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(u => u.Username).HasMaxLength(50);

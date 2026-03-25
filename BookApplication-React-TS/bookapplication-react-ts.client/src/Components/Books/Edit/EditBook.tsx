@@ -14,9 +14,10 @@ interface Book {
     genre: string;
     rating: number;
     shelf: string;
-    description: string;
+    description?: string;
     currentPage: number | null;
     totalPages: number | null;
+    coverUrl: string;
 }
 
 const EditBook = () => {
@@ -34,8 +35,10 @@ const EditBook = () => {
         description: "",
         currentPage: null,
         totalPages: null,
+        coverUrl: ""
     });
 
+    // Fetch book from your API
     useEffect(() => {
         fetch(`/api/books/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -50,6 +53,26 @@ const EditBook = () => {
                 })
             );
     }, [id]);
+
+    // Auto-populate total pages from Google Books when shelf is set to Reading
+    useEffect(() => {
+        if (book.shelf.toLowerCase() !== "reading") return;
+        if (book.totalPages != null) return;
+        if (!book.title) return; // wait until book has loaded
+
+        const query = `${book.title} ${book.author}`.trim();
+
+        fetch(`/api/googlebooks/search?q=${encodeURIComponent(query)}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+            .then(res => res.json())
+            .then(data => {
+                const pageCount = data.items?.[0]?.volumeInfo?.pageCount;
+                if (pageCount) {
+                    setBook(prev => ({ ...prev, totalPages: pageCount }));
+                }
+            });
+    }, [book.shelf, book.title]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBook({ ...book, [e.target.name]: e.target.value });
@@ -142,7 +165,6 @@ const EditBook = () => {
 
                 </div>
             </div>
-
         </div>
     );
 };

@@ -11,6 +11,7 @@ import PrivateRoute from './Components/Menu/PrivateRoute.tsx';
 import BookDetailPage from './Pages/Book/View/BookDetailPage.tsx';
 import SearchUsersPage from './Pages/Users/SearchUsersPage.tsx';
 import PublicProfilePage from './Pages/Profile/PublicProfilePage.tsx';
+import GoogleBooksSearchPage from './Pages/Book/Search/GoogleBooksSearchPage.tsx';
 
 function App() {
     return (
@@ -61,6 +62,12 @@ function App() {
                         <PublicProfilePage />
                     </PrivateRoute>
                 } />
+                <Route path="/books/search" element={
+                    <PrivateRoute>
+                        <GoogleBooksSearchPage />
+                    </PrivateRoute>
+                } />
+
             </Routes>
         </Router>
     );

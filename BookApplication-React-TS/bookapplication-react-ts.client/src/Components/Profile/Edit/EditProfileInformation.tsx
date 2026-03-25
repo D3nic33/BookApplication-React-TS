@@ -8,13 +8,15 @@ interface UserProfile {
     readingGoal: number | null;
 }
 
-const EditProfileInformation = () => {
+interface Props {
+    profile: UserProfile;
+    setProfile: React.Dispatch<React.SetStateAction<UserProfile>>;
+}
+
+const EditProfileInformation = ({ profile, setProfile }: Props) => {
     const { token } = useAuth();
     const [profileError, setProfileError] = useState("");
     const [profileSuccess, setProfileSuccess] = useState("");
-    const [profile, setProfile] = useState<UserProfile>({
-        id: 0, username: "", email: "", bio: "", readingGoal: null,
-    });
 
     const handleSaveProfile = async () => {
         setProfileError(""); setProfileSuccess("");

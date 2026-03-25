@@ -9,7 +9,10 @@ interface Book {
     genre: string;
     rating: number;
     shelf: string;
-    description: string;
+    description?: string;
+    currentPage: number | null;
+    totalPages: number | null;
+    coverUrl: string;
 }
 
 function AddBookFormInput({book, setBook, title, type } : {

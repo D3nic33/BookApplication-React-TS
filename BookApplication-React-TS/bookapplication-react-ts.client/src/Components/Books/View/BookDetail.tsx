@@ -15,6 +15,7 @@ interface Book {
     description?: string;
     currentPage: number | null;
     totalPages: number | null;
+    coverUrl: string;
 }
 
 const shelfEmoji: Record<string, string> = {
@@ -123,8 +124,11 @@ const BookDetail = () => {
 
                 {/* Colourful top banner */}
                 <div className="bg-gradient-to-r from-orange-400 to-amber-300 px-8 py-10 flex items-end gap-6">
-                    <div className="w-24 h-36 bg-white/30 rounded-xl border-2 border-white/50 shadow-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-5xl">{emoji}</span>
+                    <div className="w-24 h-36 bg-white/30 rounded-xl border-2 border-white/50 shadow-lg overflow-hidden flex items-center justify-center flex-shrink-0">
+                        {book.coverUrl
+                            ? <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
+                            : <span className="text-5xl">{emoji}</span>
+                        }
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold text-white leading-tight mb-1">

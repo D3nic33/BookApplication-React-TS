@@ -10,8 +10,12 @@ interface Book {
     genre: string;
     rating: number;
     shelf: string;
-    description: string;
+    description?: string;
+    currentPage: number | null;
+    totalPages: number | null;
+    coverUrl: string;
 }
+
 
 function ViewBook() {
     const { token } = useAuth();
