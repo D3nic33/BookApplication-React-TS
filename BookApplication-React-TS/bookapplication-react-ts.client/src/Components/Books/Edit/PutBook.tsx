@@ -2,7 +2,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import PutBookFormField from "./PutBookFormField";
 import DropdownShelf from "../Add/DropDownShelf";
-import StarRating from "../../Rating/StarRating";
+import StarRatingPicker from "../../Rating/StarRatingPicker";
 import { useAuth } from "../../../Context/AuthContext";
 
 interface Book {
@@ -105,7 +105,7 @@ const EditBook = () => {
                     {book.shelf.toLowerCase() === "read" && (
                         <div className="flex flex-col gap-1">
                             <label className="text-sm font-medium text-stone-600">Your Rating</label>
-                            <StarRating
+                            <StarRatingPicker
                                 value={book.rating}
                                 onChange={(val: number) => setBook({ ...book, rating: val })}
                             />

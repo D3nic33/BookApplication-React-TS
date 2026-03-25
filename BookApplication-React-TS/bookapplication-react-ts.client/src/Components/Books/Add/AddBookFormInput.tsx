@@ -1,4 +1,4 @@
-import StarRating from "../../Rating/StarRating";
+import StarRatingPicker from "../../Rating/StarRatingPicker";
 import DropdownShelf from "./DropDownShelf";
 
 interface Book {
@@ -30,7 +30,7 @@ function AddBookFormInput({book, setBook, title, type } : {
 
     return isNumeric ?
         (
-            <StarRating
+            <StarRatingPicker
                 value={book[title] as number ?? 0}
                 onChange={(val: number) =>
                     setBook((prevData: Book) => ({
