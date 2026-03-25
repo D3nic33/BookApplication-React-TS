@@ -2,6 +2,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../../Context/AuthContext';
 import StarRatingShow from '../../Rating/StarRatingShow';
+import ReviewSection from '../Review/ReviewSection';
 
 interface Book {
     id: number;
@@ -37,7 +38,7 @@ const BookDetail = () => {
 
     useEffect(() => {
         fetch(`/api/Books/${id}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` },
         })
             .then(res => {
                 if (res.status === 401) { navigate('/login'); return null; }
@@ -65,10 +66,11 @@ const BookDetail = () => {
     const shelfKey = book.shelf?.toLowerCase();
     const emoji = shelfEmoji[shelfKey] ?? '📚';
     const badgeClass = shelfColor[shelfKey] ?? 'bg-orange-100 text-orange-600';
+    const isReadShelf = shelfKey === 'read';
 
     const formattedDate = book.releaseDate
         ? new Date(book.releaseDate).toLocaleDateString('en-GB', {
-            day: 'numeric', month: 'long', year: 'numeric'
+            day: 'numeric', month: 'long', year: 'numeric',
         })
         : 'Unknown';
 
@@ -113,7 +115,7 @@ const BookDetail = () => {
 
                     <div className="h-px bg-orange-50" />
 
-                    {/* Description — only shown if present */}
+                    {/* Description */}
                     {book.description && (
                         <>
                             <div className="flex flex-col gap-1">
@@ -136,13 +138,18 @@ const BookDetail = () => {
                             <span className="text-stone-700 font-medium">{formattedDate}</span>
                         </div>
 
-                        {book.shelf?.toLowerCase() === 'read' && (
+                        {isReadShelf && (
                             <div className="flex justify-between items-center">
                                 <span className="text-xs text-orange-400 uppercase font-bold tracking-widest">Your Rating</span>
                                 <StarRatingShow rating={book.rating ?? 0} />
                             </div>
                         )}
                     </div>
+
+                    <div className="h-px bg-orange-50" />
+
+                    {/* Reviews */}
+                    <ReviewSection bookId={book.id} isReadShelf={isReadShelf} />
 
                     <div className="h-px bg-orange-50" />
 

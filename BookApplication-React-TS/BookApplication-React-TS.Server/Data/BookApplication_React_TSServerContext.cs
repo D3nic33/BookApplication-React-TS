@@ -11,6 +11,8 @@ namespace BookApplication_React_TS.Server.Data
 
         public DbSet<UserFollow> Follows { get; set; } = default!;
 
+        public DbSet<Review> Reviews { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(entity =>
@@ -32,6 +34,24 @@ namespace BookApplication_React_TS.Server.Data
                     .WithMany()
                     .HasForeignKey(f => f.FollowingId)
                     .OnDelete(DeleteBehavior.NoAction);
+
+                modelBuilder.Entity<Review>(entity =>
+                {
+                    entity.HasIndex(r => new { r.BookId, r.UserId }).IsUnique();
+
+                    entity.HasOne(r => r.Book)
+                        .WithMany()
+                        .HasForeignKey(r => r.BookId)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    entity.HasOne(r => r.User)
+                        .WithMany()
+                        .HasForeignKey(r => r.UserId)
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    entity.Property(r => r.ReviewText).HasMaxLength(2000);
+                    entity.Property(r => r.Stars).IsRequired();
+                });
             });
         }
     }
