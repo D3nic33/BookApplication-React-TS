@@ -89,6 +89,29 @@ namespace BookApplication_React_TS.Server.Controllers.Books
             return NoContent();
         }
 
+        [HttpGet("user/{userId}")]
+        [Authorize]
+        public async Task<IActionResult> GetPublicBooks(int userId)
+        {
+            var books = await _context.Book
+                .Where(b => b.UserId == userId)
+                .GroupBy(b => b.Shelf)
+                .Select(g => new {
+                    Shelf = g.Key,
+                    Books = g.Select(b => new {
+                        b.Id,
+                        b.Title,
+                        b.Author,
+                        b.Genre,
+                        b.Rating,
+                        b.Description
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            return Ok(books);
+        }
+
         private bool BookExists(int id)
         {
             return _context.Book.Any(e => e.Id == id && e.UserId == GetUserId());

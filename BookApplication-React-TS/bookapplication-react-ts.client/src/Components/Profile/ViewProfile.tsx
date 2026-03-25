@@ -10,35 +10,43 @@ interface UserProfile {
     readingGoal: number | null;
 }
 
+interface FollowCounts {
+    followers: number;
+    following: number;
+}
+
 const ViewProfile = () => {
     const { token } = useAuth();
     const navigate = useNavigate();
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [booksRead, setBooksRead] = useState(0);
+    const [followCounts, setFollowCounts] = useState<FollowCounts>({ followers: 0, following: 0 });
 
     useEffect(() => {
         fetch("/api/user/me", {
-            headers: { 'Authorization': `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => {
-                if (res.status === 401) {
-                    navigate("/login"); return null;
-                }
+                if (res.status === 401) { navigate("/login"); return null; }
                 return res.json();
             })
             .then(data => {
-                if (data) {
-                    setProfile({ ...data, bio: data.bio ?? "" });
-                }
+                if (data) setProfile({ ...data, bio: data.bio ?? "" });
                 setLoading(false);
             });
 
         fetch("/api/user/me/books/read/count", {
-            headers: { 'Authorization': `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
             .then(data => setBooksRead(data.count));
+
+        fetch("/api/user/me/counts", {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(res => res.json())
+            .then(data => setFollowCounts(data));
     }, []);
 
     if (loading) return (
@@ -79,6 +87,19 @@ const ViewProfile = () => {
                         {profile.username.charAt(0).toUpperCase()}
                     </div>
                     <h2 className="text-2xl font-bold text-stone-800">{profile.username}</h2>
+
+                    {/* Follower / Following counts */}
+                    <div className="flex gap-6 mt-1">
+                        <div className="flex flex-col items-center">
+                            <span className="text-lg font-bold text-stone-800">{followCounts.followers}</span>
+                            <span className="text-xs text-stone-400 uppercase tracking-widest">Followers</span>
+                        </div>
+                        <div className="w-px bg-orange-100" />
+                        <div className="flex flex-col items-center">
+                            <span className="text-lg font-bold text-stone-800">{followCounts.following}</span>
+                            <span className="text-xs text-stone-400 uppercase tracking-widest">Following</span>
+                        </div>
+                    </div>
 
                     {/* Bio */}
                     <div className="bg-amber-50 border border-orange-100 rounded-2xl px-5 py-3 text-center text-stone-500 text-sm w-full">
