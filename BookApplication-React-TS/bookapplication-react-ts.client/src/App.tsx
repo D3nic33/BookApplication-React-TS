@@ -9,6 +9,8 @@ import EditProfile from './Pages/Profile/EditProfilePage.tsx';
 import Profile from './Pages/Profile/ProfilePage.tsx';
 import PrivateRoute from './Components/Menu/PrivateRoute.tsx';
 import BookDetail from './Components/Books/View/BookDetail.tsx';
+import SearchUsersPage from './Pages/Users/SearchUsersPage.tsx';
+import PublicProfilePage from './Pages/Profile/PublicProfilePage.tsx';
 
 function App() {
     return (
@@ -47,6 +49,16 @@ function App() {
                 <Route path="/books/:id" element={
                     <PrivateRoute>
                         <BookDetail />
+                    </PrivateRoute>
+                } />
+                <Route path="/users" element={
+                    <PrivateRoute>
+                        <SearchUsersPage />
+                    </PrivateRoute>
+                } />
+                <Route path="/profile/:userId" element={
+                    <PrivateRoute>
+                        <PublicProfilePage />
                     </PrivateRoute>
                 } />
             </Routes>

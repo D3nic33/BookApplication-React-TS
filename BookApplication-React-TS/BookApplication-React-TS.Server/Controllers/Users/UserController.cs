@@ -1,5 +1,6 @@
 ﻿using BookApplication_React_TS.Server.Data;
 using BookApplication_React_TS.Server.DTO;
+using BookApplication_React_TS.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -71,6 +72,28 @@ namespace BookApplication_React_TS.Server.Controllers.Users
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var count = await _db.Book.CountAsync(b => b.UserId == userId && b.Shelf == "Read");
             return Ok(new { count });
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetPublicProfile(int userId)
+        {
+            var user = await _db.User
+                .Where(u => u.Id == userId)
+                .Select(u => new { u.Id, u.Username, u.Bio, u.ReadingGoal })
+                .FirstOrDefaultAsync();
+
+            if (user == null) return NotFound();
+            return Ok(user);
+        }
+
+        [HttpGet("me/counts")]
+        public async Task<IActionResult> GetMyFollowCounts()
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var currentUserId = await _db.User.FindAsync(userId);
+            var followers = await _db.Follows.CountAsync(f => f.FollowingId == currentUserId.Id);
+            var following = await _db.Follows.CountAsync(f => f.FollowerId == currentUserId.Id);
+            return Ok(new { followers, following });
         }
 
         private static string HashPassword(string password)

@@ -9,6 +9,8 @@ namespace BookApplication_React_TS.Server.Data
 
         public DbSet<User> User { get; set; } = default!;
 
+        public DbSet<UserFollow> Follows { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(entity =>
@@ -18,6 +20,18 @@ namespace BookApplication_React_TS.Server.Data
                 entity.Property(u => u.PasswordHash).HasMaxLength(512);
                 entity.Property(u => u.Bio).HasMaxLength(500);
                 entity.Property(u => u.ReadingGoal).IsRequired(false);
+
+                modelBuilder.Entity<UserFollow>()
+                    .HasOne(f => f.Follower)
+                    .WithMany()
+                    .HasForeignKey(f => f.FollowerId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                modelBuilder.Entity<UserFollow>()
+                    .HasOne(f => f.Following)
+                    .WithMany()
+                    .HasForeignKey(f => f.FollowingId)
+                    .OnDelete(DeleteBehavior.NoAction);
             });
         }
     }
