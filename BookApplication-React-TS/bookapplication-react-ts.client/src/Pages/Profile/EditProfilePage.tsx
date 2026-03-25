@@ -1,4 +1,4 @@
-import EditProfile from "../../Components/Profile/EditProfile";
+import EditProfile from "../../Components/Profile/Edit/EditProfile";
 import DefaultLayout from "../../Layouts/DefaultLayout";
 
 function EditProfilePage() {

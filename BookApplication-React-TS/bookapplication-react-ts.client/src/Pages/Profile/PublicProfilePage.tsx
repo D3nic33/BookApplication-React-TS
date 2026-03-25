@@ -1,4 +1,4 @@
-import PublicProfile from "../../Components/Profile/PublicProfile";
+import PublicProfile from "../../Components/Profile/View/PublicProfile";
 import DefaultLayout from "../../Layouts/DefaultLayout";
 
 function PublicProfilePage() {

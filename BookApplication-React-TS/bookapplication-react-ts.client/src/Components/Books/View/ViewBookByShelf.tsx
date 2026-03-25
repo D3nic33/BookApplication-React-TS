@@ -59,7 +59,8 @@ const BookShelf = ({ shelf, title }: BookShelfProps) => {
                         <p className="text-center mt-2 text-sm font-medium">{book.title}</p>
                         <p className="text-center text-sm text-gray-500">{book.author}</p>
 
-                        {shelf === "read" && (
+                        {/* Show stars when there is a rating */}
+                        {shelf === "read" && book.rating != 0 && (
                             <StarRatingShow rating={book.rating ?? 0} />
                         )}
                     </div>

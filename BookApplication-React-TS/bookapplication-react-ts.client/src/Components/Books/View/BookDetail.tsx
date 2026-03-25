@@ -44,15 +44,37 @@ const BookDetail = () => {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then(res => {
-                if (res.status === 401) { navigate('/login'); return null; }
-                if (!res.ok) { navigate('/books'); return null; }
+                if (res.status === 401) {
+                    navigate('/login');
+                    return null;
+                }
+                if (!res.ok) {
+                    navigate('/books');
+                    return null;
+                }
                 return res.json();
             })
             .then(data => {
-                if (data) setBook(data);
+                if (data) {
+                    setBook(data);
+                }
                 setLoading(false);
             });
     }, [id, refreshKey]);
+
+    const handleFinished = async () => {
+        if (!book) return;
+        const updated = { ...book, shelf: 'Read' };
+        const res = await fetch(`/api/Books/${book.id}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updated),
+        });
+        if (res.ok) setBook(updated);
+    };
 
     if (loading) return (
         <div className="min-h-screen bg-amber-50 flex items-center justify-center">
@@ -182,6 +204,14 @@ const BookDetail = () => {
                                 ) : (
                                     <p className="text-xs text-stone-300 italic">Set total pages to see your progress.</p>
                                 )}
+
+                                {/* Finished button */}
+                                <button
+                                    onClick={handleFinished}
+                                    className="w-full mt-1 bg-green-400 hover:bg-green-500 active:bg-green-600 text-white font-semibold py-2 rounded-full text-sm shadow transition-all"
+                                >
+                                    Finished ✅
+                                </button>
                             </div>
                         )}
 
