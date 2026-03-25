@@ -7,7 +7,7 @@
         public Book? Book { get; set; }
         public int UserId { get; set; }
         public User? User { get; set; }
-        public int Stars { get; set; } // 1–5
+        public double Stars { get; set; } // 1–5
         public string ReviewText { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }

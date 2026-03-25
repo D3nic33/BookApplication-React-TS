@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from 'react';
-import BookShelf from './ViewBookByShelf';
+import BooksByShelf from './ViewBookByShelf';
 import { useAuth } from '../../../Context/AuthContext';
 
 interface Book {
@@ -16,8 +16,15 @@ interface Book {
 function ViewBook() {
     const { token } = useAuth();
     const [books, setBooks] = useState<Book[]>([]);
+    const [shelves, setShelves] = useState<string[]>([]);
 
     useEffect(() => {
+        fetch('/api/books/shelves', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(res => res.json())
+            .then(data => setShelves(data));
+
         populateBookData();
     }, []);
 
@@ -44,9 +51,13 @@ function ViewBook() {
 
             {/* Shelves */}
             <div className="max-w-5xl mx-auto flex flex-col gap-10">
-                <BookShelf shelf="want to read" title="Want to Read" />
-                <BookShelf shelf="read" title="Read" />
-                <BookShelf shelf="did not finish" title="Did Not Finish" />
+                {shelves.map(shelf => (
+                    <BooksByShelf
+                        key={shelf}
+                        shelf={shelf}
+                        title={shelf.charAt(0).toUpperCase() + shelf.slice(1)}
+                    />
+                ))}
             </div>
 
         </div>

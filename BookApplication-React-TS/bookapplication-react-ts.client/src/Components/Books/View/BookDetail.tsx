@@ -13,6 +13,8 @@ interface Book {
     rating: number;
     shelf: string;
     description?: string;
+    currentPage: number | null;
+    totalPages: number | null;
 }
 
 const shelfEmoji: Record<string, string> = {
@@ -35,6 +37,7 @@ const BookDetail = () => {
     const navigate = useNavigate();
     const [book, setBook] = useState<Book | null>(null);
     const [loading, setLoading] = useState(true);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     useEffect(() => {
         fetch(`/api/Books/${id}`, {
@@ -49,7 +52,7 @@ const BookDetail = () => {
                 if (data) setBook(data);
                 setLoading(false);
             });
-    }, [id]);
+    }, [id, refreshKey]);
 
     if (loading) return (
         <div className="min-h-screen bg-amber-50 flex items-center justify-center">
@@ -67,6 +70,12 @@ const BookDetail = () => {
     const emoji = shelfEmoji[shelfKey] ?? '📚';
     const badgeClass = shelfColor[shelfKey] ?? 'bg-orange-100 text-orange-600';
     const isReadShelf = shelfKey === 'read';
+    const isReadingShelf = shelfKey === 'reading';
+
+    const progressPercent =
+        book.totalPages && book.totalPages > 0 && book.currentPage != null
+            ? Math.min(Math.round((book.currentPage / book.totalPages) * 100), 100)
+            : null;
 
     const formattedDate = book.releaseDate
         ? new Date(book.releaseDate).toLocaleDateString('en-GB', {
@@ -128,6 +137,7 @@ const BookDetail = () => {
 
                     {/* Info rows */}
                     <div className="flex flex-col gap-4">
+
                         <div className="flex justify-between items-center">
                             <span className="text-xs text-orange-400 uppercase font-bold tracking-widest">Genre</span>
                             <span className="text-stone-700 font-medium">{book.genre || '—'}</span>
@@ -138,18 +148,53 @@ const BookDetail = () => {
                             <span className="text-stone-700 font-medium">{formattedDate}</span>
                         </div>
 
+                        {/* Rating — Read shelf only */}
                         {isReadShelf && (
                             <div className="flex justify-between items-center">
                                 <span className="text-xs text-orange-400 uppercase font-bold tracking-widest">Your Rating</span>
                                 <StarRatingShow rating={book.rating ?? 0} />
                             </div>
                         )}
+
+                        {/* Reading progress — Reading shelf only */}
+                        {isReadingShelf && (
+                            <div className="flex flex-col gap-2">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-xs text-orange-400 uppercase font-bold tracking-widest">Reading Progress</span>
+                                    <span className="text-sm font-medium text-stone-600">
+                                        {book.currentPage ?? 0}
+                                        {book.totalPages != null
+                                            ? <span className="text-stone-400"> / {book.totalPages} pages</span>
+                                            : <span className="text-stone-400"> pages</span>
+                                        }
+                                    </span>
+                                </div>
+                                {progressPercent !== null ? (
+                                    <>
+                                        <div className="w-full bg-orange-100 rounded-full h-3">
+                                            <div
+                                                className="bg-orange-400 h-3 rounded-full transition-all duration-300"
+                                                style={{ width: `${progressPercent}%` }}
+                                            />
+                                        </div>
+                                        <p className="text-xs text-stone-400 text-right">{progressPercent}% complete</p>
+                                    </>
+                                ) : (
+                                    <p className="text-xs text-stone-300 italic">Set total pages to see your progress.</p>
+                                )}
+                            </div>
+                        )}
+
                     </div>
 
                     <div className="h-px bg-orange-50" />
 
                     {/* Reviews */}
-                    <ReviewSection bookId={book.id} isReadShelf={isReadShelf} />
+                    <ReviewSection
+                        bookId={book.id}
+                        isReadShelf={isReadShelf}
+                        onReviewChange={() => setRefreshKey(k => k + 1)}
+                    />
 
                     <div className="h-px bg-orange-50" />
 

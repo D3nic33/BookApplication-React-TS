@@ -64,10 +64,9 @@ namespace BookApplication_React_TS.Server.Controllers.Books
         {
             var userId = GetUserId();
 
-            if (dto.Stars < 1 || dto.Stars > 5)
-                return BadRequest(new { message = "Stars must be between 1 and 5." });
+            if (dto.Rating < 1 || dto.Rating > 5 || (dto.Rating * 2) % 1 != 0)
+                return BadRequest(new { message = "Rating must be between 1 and 5." });
 
-            // Ensure the book belongs to this user
             var book = await _db.Book.FirstOrDefaultAsync(b => b.Id == bookId && b.UserId == userId);
             if (book is null) return NotFound(new { message = "Book not found." });
 
@@ -82,11 +81,15 @@ namespace BookApplication_React_TS.Server.Controllers.Books
             {
                 BookId = bookId,
                 UserId = userId,
-                Stars = dto.Stars,
+                Stars = dto.Rating,
                 ReviewText = dto.ReviewText
             };
 
             _db.Reviews.Add(review);
+
+            // Sync rating to Book table
+            book.Rating = dto.Rating;
+
             await _db.SaveChangesAsync();
 
             await _db.Entry(review).Reference(r => r.User).LoadAsync();
@@ -104,15 +107,20 @@ namespace BookApplication_React_TS.Server.Controllers.Books
         {
             var userId = GetUserId();
 
-            if (dto.Stars < 1 || dto.Stars > 5)
-                return BadRequest(new { message = "Stars must be between 1 and 5." });
+            if (dto.Rating < 1 || dto.Rating > 5 || (dto.Rating * 2) % 1 != 0)
+                return BadRequest(new { message = "Rating must be between 1 and 5." });
 
-            var review = await _db.Reviews.FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
+            var review = await _db.Reviews
+                .Include(r => r.Book)
+                .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
             if (review is null) return NotFound();
 
-            review.Stars = dto.Stars;
+            review.Stars = dto.Rating;
             review.ReviewText = dto.ReviewText;
             review.UpdatedAt = DateTime.UtcNow;
+
+            // Sync rating to Book table
+            review.Book!.Rating = dto.Rating;
 
             await _db.SaveChangesAsync();
             return Ok(new { message = "Review updated." });
@@ -123,8 +131,14 @@ namespace BookApplication_React_TS.Server.Controllers.Books
         public async Task<IActionResult> DeleteReview(int id)
         {
             var userId = GetUserId();
-            var review = await _db.Reviews.FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
+
+            var review = await _db.Reviews
+                .Include(r => r.Book)
+                .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
             if (review is null) return NotFound();
+
+            // Reset rating on Book table
+            review.Book!.Rating = 0;
 
             _db.Reviews.Remove(review);
             await _db.SaveChangesAsync();

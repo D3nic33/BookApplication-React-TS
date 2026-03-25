@@ -23,7 +23,7 @@ const Menu = () => {
             {/* Logo */}
             <a href="/" className="flex items-center gap-2 py-4 mr-6 flex-shrink-0">
                 <span className="text-2xl">📚</span>
-                <span className="font-bold text-stone-800 text-lg tracking-tight">MyLibrary</span>
+                <span className="font-bold text-stone-800 text-lg tracking-tight">Shelfy</span>
             </a>
 
             {/* Nav links */}

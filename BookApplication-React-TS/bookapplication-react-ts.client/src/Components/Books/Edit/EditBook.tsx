@@ -1,9 +1,10 @@
 ﻿import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import PutBookFormField from "./PutBookFormField";
-import DropdownShelf from "../Add/DropDownShelf";
-import StarRatingPicker from "../../Rating/StarRatingPicker";
 import { useAuth } from "../../../Context/AuthContext";
+
+import EditBookFormField from "./EditBookFormField";
+import DropdownShelf from "../Add/DropDownShelf";
+import ReadingProgressTracker from "../ProgressTracker/ReadingProgressTracker";
 
 interface Book {
     id: number;
@@ -14,6 +15,8 @@ interface Book {
     rating: number;
     shelf: string;
     description: string;
+    currentPage: number | null;
+    totalPages: number | null;
 }
 
 const EditBook = () => {
@@ -29,17 +32,23 @@ const EditBook = () => {
         rating: 0,
         shelf: "",
         description: "",
+        currentPage: null,
+        totalPages: null,
     });
 
     useEffect(() => {
         fetch(`/api/books/${id}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` },
         })
             .then(res => res.json())
-            .then(data => setBook({
-                ...data,
-                releaseDate: data.releaseDate ? data.releaseDate.split("T")[0] : "",
-            }));
+            .then(data =>
+                setBook({
+                    ...data,
+                    releaseDate: data.releaseDate ? data.releaseDate.split("T")[0] : "",
+                    currentPage: data.currentPage ?? null,
+                    totalPages: data.totalPages ?? null,
+                })
+            );
     }, [id]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,14 +59,16 @@ const EditBook = () => {
         await fetch(`/api/books/${id}`, {
             method: "PUT",
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(book),
         });
         navigate("/books");
     };
+
+    const isReading = book.shelf.toLowerCase() === "reading";
 
     return (
         <div className="min-h-screen bg-amber-50 px-6 py-12">
@@ -87,10 +98,10 @@ const EditBook = () => {
             <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-8">
                 <div className="flex flex-col gap-5">
 
-                    <PutBookFormField label="title" name="title" value={book.title} onChange={handleChange} />
-                    <PutBookFormField label="author" name="author" value={book.author} onChange={handleChange} />
-                    <PutBookFormField label="genre" name="genre" value={book.genre} onChange={handleChange} />
-                    <PutBookFormField label="release date" name="releaseDate" value={book.releaseDate} onChange={handleChange} type="date" />
+                    <EditBookFormField label="title" name="title" value={book.title} onChange={handleChange} />
+                    <EditBookFormField label="author" name="author" value={book.author} onChange={handleChange} />
+                    <EditBookFormField label="genre" name="genre" value={book.genre} onChange={handleChange} />
+                    <EditBookFormField label="release date" name="releaseDate" value={book.releaseDate} onChange={handleChange} type="date" />
 
                     {/* Shelf dropdown */}
                     <div className="flex flex-col gap-1">
@@ -101,15 +112,14 @@ const EditBook = () => {
                         />
                     </div>
 
-                    {/* Star rating — only for read books */}
-                    {book.shelf.toLowerCase() === "read" && (
-                        <div className="flex flex-col gap-1">
-                            <label className="text-sm font-medium text-stone-600">Your Rating</label>
-                            <StarRatingPicker
-                                value={book.rating}
-                                onChange={(val: number) => setBook({ ...book, rating: val })}
-                            />
-                        </div>
+                    {/* Reading progress — only for currently reading */}
+                    {isReading && (
+                        <ReadingProgressTracker
+                            currentPage={book.currentPage}
+                            totalPages={book.totalPages}
+                            onCurrentPageChange={(val) => setBook({ ...book, currentPage: val })}
+                            onTotalPagesChange={(val) => setBook({ ...book, totalPages: val })}
+                        />
                     )}
 
                     <div className="h-px bg-orange-100 my-1" />

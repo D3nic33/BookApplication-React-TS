@@ -22,6 +22,10 @@ namespace BookApplication_React_TS.Server.Models
 
         public string Description { get; set; } = string.Empty;
 
+        public int? CurrentPage { get; set; }
+
+        public int? TotalPages { get; set; }
+
         public int UserId { get; set; }
 
         public User? User { get; set; }
