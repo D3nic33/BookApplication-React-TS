@@ -17,9 +17,10 @@ interface Review {
 interface ReviewSectionProps {
     bookId: number;
     isReadShelf: boolean;
+    onReviewChange: () => void
 }
 
-const ReviewSection = ({ bookId, isReadShelf }: ReviewSectionProps) => {
+const ReviewSection = ({ bookId, isReadShelf, onReviewChange }: ReviewSectionProps) => {
     const { token } = useAuth();
     const [reviews, setReviews] = useState<Review[]>([]);
     const [myReview, setMyReview] = useState<Review | null>(null);
@@ -61,10 +62,11 @@ const ReviewSection = ({ bookId, isReadShelf }: ReviewSectionProps) => {
         const res = await fetch(`/api/reviews/book/${bookId}`, {
             method: 'POST',
             headers,
-            body: JSON.stringify({ stars, reviewText: text }),
+            body: JSON.stringify({ rating: stars, reviewText: text }),
         });
         if (res.ok) {
             await Promise.all([fetchReviews(), fetchMyReview()]);
+            onReviewChange();
         } else {
             const data = await res.json();
             setError(data.message ?? 'Failed to submit review.');
@@ -80,11 +82,12 @@ const ReviewSection = ({ bookId, isReadShelf }: ReviewSectionProps) => {
         const res = await fetch(`/api/reviews/${myReview.id}`, {
             method: 'PUT',
             headers,
-            body: JSON.stringify({ stars, reviewText: text }),
+            body: JSON.stringify({ rating: stars, reviewText: text }),
         });
         if (res.ok) {
             setIsEditing(false);
             await Promise.all([fetchReviews(), fetchMyReview()]);
+            onReviewChange();
         } else {
             const data = await res.json();
             setError(data.message ?? 'Failed to update review.');
@@ -100,6 +103,7 @@ const ReviewSection = ({ bookId, isReadShelf }: ReviewSectionProps) => {
             setStars(0);
             setText('');
             await fetchReviews();
+            onReviewChange();
         }
     };
 

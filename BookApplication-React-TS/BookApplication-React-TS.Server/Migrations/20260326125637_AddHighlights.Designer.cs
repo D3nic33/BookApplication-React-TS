@@ -4,6 +4,7 @@ using BookApplication_React_TS.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookApplication_React_TS.Server.Migrations
 {
     [DbContext(typeof(BookApplication_React_TSServerContext))]
-    partial class BookApplication_React_TSServerContextModelSnapshot : ModelSnapshot
+    [Migration("20260326125637_AddHighlights")]
+    partial class AddHighlights
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,9 +131,6 @@ namespace BookApplication_React_TS.Server.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("PageNumber")
-                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()

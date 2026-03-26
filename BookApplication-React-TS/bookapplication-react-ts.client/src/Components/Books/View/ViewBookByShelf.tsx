@@ -12,7 +12,10 @@ interface Book {
     genre: string;
     rating: number;
     shelf: string;
-    description: string;
+    description?: string;
+    currentPage: number | null;
+    totalPages: number | null;
+    coverUrl: string;
 }
 
 interface BookShelfProps {
@@ -55,11 +58,20 @@ const BookShelf = ({ shelf, title }: BookShelfProps) => {
                         className="flex flex-col items-center min-w-28 cursor-pointer"
                         onClick={() => navigate(`/books/${book.id}`)}
                     >
-                        <div className="w-28 h-44 bg-white/50 rounded-lg shadow-md" />
-                        <p className="text-center mt-2 text-sm font-medium">{book.title}</p>
-                        <p className="text-center text-sm text-gray-500">{book.author}</p>
+                        
+                        <div className="w-24 h-36 bg-white/30 rounded-xl border-2 border-white/50 shadow-lg overflow-hidden flex items-center justify-center flex-shrink-0">
+                            {book.coverUrl
+                                ? <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
+                                : <div className="w-28 h-44 bg-white/50 rounded-lg shadow-md" />
+                            }
+                        </div>
 
-                        {shelf === "read" && (
+
+                        <p className="w-28 text-center mt-2 text-sm font-medium line-clamp-2 leading-tight">{book.title}</p>
+                        <p className="w-28 text-center text-xs text-gray-500 truncate">{book.author}</p>
+
+                        {/* Show stars when there is a rating */}
+                        {shelf === "read" && book.rating != 0 && (
                             <StarRatingShow rating={book.rating ?? 0} />
                         )}
                     </div>

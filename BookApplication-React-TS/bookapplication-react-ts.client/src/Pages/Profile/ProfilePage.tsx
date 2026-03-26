@@ -1,4 +1,4 @@
-import ViewProfile from "../../Components/Profile/ViewProfile";
+import ViewProfile from "../../Components/Profile/View/ViewProfile";
 import DefaultLayout from "../../Layouts/DefaultLayout";
 
 function ProfilePage() {

@@ -12,6 +12,7 @@ const DropdownShelf = ({ value, onChange }: ShelfDropdownProps) => {
         >
             <option value="" disabled>Select a shelf...</option>
             <option value="read">Read</option>
+            <option value="reading">Reading</option>
             <option value="want to read">Want to Read</option>
             <option value="did not finish">Did Not Finish</option>
         </select>

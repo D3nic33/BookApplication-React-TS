@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../../Context/AuthContext';
 import StarRatingShow from '../../Rating/StarRatingShow';
 import ReviewSection from '../Review/ReviewSection';
+import NotesSection from '../Notes/NotesSection';
+import HighlightSection from '../Notes/HighlightSection';
 
 interface Book {
     id: number;
@@ -13,6 +15,9 @@ interface Book {
     rating: number;
     shelf: string;
     description?: string;
+    currentPage: number | null;
+    totalPages: number | null;
+    coverUrl: string;
 }
 
 const shelfEmoji: Record<string, string> = {
@@ -35,21 +40,44 @@ const BookDetail = () => {
     const navigate = useNavigate();
     const [book, setBook] = useState<Book | null>(null);
     const [loading, setLoading] = useState(true);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     useEffect(() => {
         fetch(`/api/Books/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then(res => {
-                if (res.status === 401) { navigate('/login'); return null; }
-                if (!res.ok) { navigate('/books'); return null; }
+                if (res.status === 401) {
+                    navigate('/login');
+                    return null;
+                }
+                if (!res.ok) {
+                    navigate('/books');
+                    return null;
+                }
                 return res.json();
             })
             .then(data => {
-                if (data) setBook(data);
+                if (data) {
+                    setBook(data);
+                }
                 setLoading(false);
             });
-    }, [id]);
+    }, [id, refreshKey]);
+
+    const handleFinished = async () => {
+        if (!book) return;
+        const updated = { ...book, shelf: 'Read' };
+        const res = await fetch(`/api/Books/${book.id}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updated),
+        });
+        if (res.ok) setBook(updated);
+    };
 
     if (loading) return (
         <div className="min-h-screen bg-amber-50 flex items-center justify-center">
@@ -67,6 +95,12 @@ const BookDetail = () => {
     const emoji = shelfEmoji[shelfKey] ?? '📚';
     const badgeClass = shelfColor[shelfKey] ?? 'bg-orange-100 text-orange-600';
     const isReadShelf = shelfKey === 'read';
+    const isReadingShelf = shelfKey === 'reading';
+
+    const progressPercent =
+        book.totalPages && book.totalPages > 0 && book.currentPage != null
+            ? Math.min(Math.round((book.currentPage / book.totalPages) * 100), 100)
+            : null;
 
     const formattedDate = book.releaseDate
         ? new Date(book.releaseDate).toLocaleDateString('en-GB', {
@@ -92,8 +126,11 @@ const BookDetail = () => {
 
                 {/* Colourful top banner */}
                 <div className="bg-gradient-to-r from-orange-400 to-amber-300 px-8 py-10 flex items-end gap-6">
-                    <div className="w-24 h-36 bg-white/30 rounded-xl border-2 border-white/50 shadow-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-5xl">{emoji}</span>
+                    <div className="w-24 h-36 bg-white/30 rounded-xl border-2 border-white/50 shadow-lg overflow-hidden flex items-center justify-center flex-shrink-0">
+                        {book.coverUrl
+                            ? <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
+                            : <span className="text-5xl">{emoji}</span>
+                        }
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold text-white leading-tight mb-1">
@@ -128,6 +165,7 @@ const BookDetail = () => {
 
                     {/* Info rows */}
                     <div className="flex flex-col gap-4">
+
                         <div className="flex justify-between items-center">
                             <span className="text-xs text-orange-400 uppercase font-bold tracking-widest">Genre</span>
                             <span className="text-stone-700 font-medium">{book.genre || '—'}</span>
@@ -138,18 +176,71 @@ const BookDetail = () => {
                             <span className="text-stone-700 font-medium">{formattedDate}</span>
                         </div>
 
+                        {/* Rating — Read shelf only */}
                         {isReadShelf && (
                             <div className="flex justify-between items-center">
                                 <span className="text-xs text-orange-400 uppercase font-bold tracking-widest">Your Rating</span>
                                 <StarRatingShow rating={book.rating ?? 0} />
                             </div>
                         )}
+
+                        {/* Reading progress — Reading shelf only */}
+                        {isReadingShelf && (
+                            <div className="flex flex-col gap-2">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-xs text-orange-400 uppercase font-bold tracking-widest">Reading Progress</span>
+                                    <span className="text-sm font-medium text-stone-600">
+                                        {book.currentPage ?? 0}
+                                        {book.totalPages != null
+                                            ? <span className="text-stone-400"> / {book.totalPages} pages</span>
+                                            : <span className="text-stone-400"> pages</span>
+                                        }
+                                    </span>
+                                </div>
+                                {progressPercent !== null ? (
+                                    <>
+                                        <div className="w-full bg-orange-100 rounded-full h-3">
+                                            <div
+                                                className="bg-orange-400 h-3 rounded-full transition-all duration-300"
+                                                style={{ width: `${progressPercent}%` }}
+                                            />
+                                        </div>
+                                        <p className="text-xs text-stone-400 text-right">{progressPercent}% complete</p>
+                                    </>
+                                ) : (
+                                    <p className="text-xs text-stone-300 italic">Set total pages to see your progress.</p>
+                                )}
+
+                                {/* Finished button */}
+                                <button
+                                    onClick={handleFinished}
+                                    className="w-full mt-1 bg-green-400 hover:bg-green-500 active:bg-green-600 text-white font-semibold py-2 rounded-full text-sm shadow transition-all"
+                                >
+                                    Finished ✅
+                                </button>
+                            </div>
+                        )}
+
                     </div>
+
+                    {/* Notes & Highlights — Reading shelf only */}
+                    {isReadingShelf && (
+                        <>
+                            <div className="h-px bg-orange-50" />
+                            <NotesSection bookId={book.id} />
+                            <div className="h-px bg-orange-50" />
+                            <HighlightSection bookId={book.id} />
+                        </>
+                    )}
 
                     <div className="h-px bg-orange-50" />
 
                     {/* Reviews */}
-                    <ReviewSection bookId={book.id} isReadShelf={isReadShelf} />
+                    <ReviewSection
+                        bookId={book.id}
+                        isReadShelf={isReadShelf}
+                        onReviewChange={() => setRefreshKey(k => k + 1)}
+                    />
 
                     <div className="h-px bg-orange-50" />
 

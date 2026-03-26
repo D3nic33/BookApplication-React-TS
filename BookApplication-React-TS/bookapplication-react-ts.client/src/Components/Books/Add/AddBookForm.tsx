@@ -12,8 +12,12 @@ interface Book {
     genre: string;
     rating: number;
     shelf: string;
-    description: string;
+    description?: string;
+    currentPage: number | null;
+    totalPages: number | null;
+    coverUrl: string;
 }
+
 
 function AddBook() {
     const { token } = useAuth();
@@ -27,15 +31,16 @@ function AddBook() {
         rating: 0.0,
         shelf: "",
         description: "",
+        currentPage: 0,
+        totalPages: null,
+        coverUrl: ""
     });
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (!token) return;
-
         await addBookData(newBook, token);
-
-        setNewBook({ id: 0, title: "", author: "", releaseDate: "", genre: "", rating: 0.0, shelf: "", description: "" });
+        setNewBook({ id: 0, title: "", author: "", releaseDate: "", genre: "", rating: 0.0, shelf: "", description: "", currentPage: 0, totalPages: null, coverUrl: ""});
         setIsPopupOpen(true);
     };
 
@@ -64,11 +69,29 @@ function AddBook() {
                     <AddBookFormInput book={newBook} setBook={setNewBook} title="genre" type="text" />
                     <AddBookFormInput book={newBook} setBook={setNewBook} title="shelf" type="text" />
 
+                    {/* Total pages */}
+                    <div className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-stone-600 capitalize">Total Pages</label>
+                        <input
+                            type="number"
+                            min={1}
+                            value={newBook.totalPages ?? ""}
+                            onChange={e =>
+                                setNewBook({
+                                    ...newBook,
+                                    totalPages: e.target.value === "" ? null : Math.max(1, parseInt(e.target.value)),
+                                })
+                            }
+                            placeholder="e.g. 320"
+                            className="w-full bg-amber-50 border border-orange-100 rounded-xl px-4 py-2 text-sm text-stone-700 placeholder-stone-300 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                        />
+                    </div>
+
+                    {/* Rating — only for Read shelf */}
                     {newBook.shelf.toLowerCase() === "read" && (
                         <AddBookFormInput book={newBook} setBook={setNewBook} title="rating" type="number" />
                     )}
 
-                    {/* Divider */}
                     <div className="h-px bg-orange-100 my-1" />
 
                     <button

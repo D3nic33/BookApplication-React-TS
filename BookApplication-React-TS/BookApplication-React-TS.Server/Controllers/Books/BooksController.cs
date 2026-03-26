@@ -112,6 +112,19 @@ namespace BookApplication_React_TS.Server.Controllers.Books
             return Ok(books);
         }
 
+        // GET: api/books/shelves
+        [HttpGet("shelves")]
+        public async Task<IActionResult> GetShelves()
+        {
+            var shelves = await _context.Book
+                .Where(b => b.UserId == GetUserId() && b.Shelf != null)
+                .Select(b => b.Shelf)
+                .Distinct()
+                .ToListAsync();
+
+            return Ok(shelves);
+        }
+
         private bool BookExists(int id)
         {
             return _context.Book.Any(e => e.Id == id && e.UserId == GetUserId());

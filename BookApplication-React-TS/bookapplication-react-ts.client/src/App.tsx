@@ -1,16 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import BookOverview from './Pages/Book/View/BooksOverview.tsx'
+import BookOverviewPage from './Pages/Book/View/BooksOverviewPage.tsx'
 import Home from '../src/Pages/Home/HomePage.tsx'
-import AddBook from './Pages/Book/Add/AddBook.tsx'
-import EditBook from './Pages/Book/Edit/EditBook.tsx';
+import AddBookPage from './Pages/Book/Add/AddBookPage.tsx'
+import EditBookPage from './Pages/Book/Edit/EditBookPage.tsx';
 import Login from './Pages/Login/Login.tsx';
 import EditProfile from './Pages/Profile/EditProfilePage.tsx';
-import Profile from './Pages/Profile/ProfilePage.tsx';
+import ProfilePage from './Pages/Profile/ProfilePage.tsx';
 import PrivateRoute from './Components/Menu/PrivateRoute.tsx';
-import BookDetail from './Components/Books/View/BookDetail.tsx';
+import BookDetailPage from './Pages/Book/View/BookDetailPage.tsx';
 import SearchUsersPage from './Pages/Users/SearchUsersPage.tsx';
 import PublicProfilePage from './Pages/Profile/PublicProfilePage.tsx';
+import GoogleBooksSearchPage from './Pages/Book/Search/GoogleBooksSearchPage.tsx';
 
 function App() {
     return (
@@ -23,7 +24,7 @@ function App() {
                 {/* Protected routes */}
                 <Route path="/profile" element={
                     <PrivateRoute>
-                        <Profile />
+                        <ProfilePage />
                     </PrivateRoute>
                 } />
                 <Route path="/profile/edit" element={
@@ -33,22 +34,22 @@ function App() {
                 } />
                 <Route path="/books" element={
                     <PrivateRoute>
-                        <BookOverview />
+                        <BookOverviewPage />
                     </PrivateRoute>
                 } />
                 <Route path="/books/add" element={
                     <PrivateRoute>
-                        <AddBook />
+                        <AddBookPage />
                     </PrivateRoute>
                 } />
                 <Route path="/books/:id/edit" element={
                     <PrivateRoute>
-                        <EditBook />
+                        <EditBookPage />
                     </PrivateRoute>
                 } />
                 <Route path="/books/:id" element={
                     <PrivateRoute>
-                        <BookDetail />
+                        <BookDetailPage />
                     </PrivateRoute>
                 } />
                 <Route path="/users" element={
@@ -61,6 +62,12 @@ function App() {
                         <PublicProfilePage />
                     </PrivateRoute>
                 } />
+                <Route path="/books/search" element={
+                    <PrivateRoute>
+                        <GoogleBooksSearchPage />
+                    </PrivateRoute>
+                } />
+
             </Routes>
         </Router>
     );

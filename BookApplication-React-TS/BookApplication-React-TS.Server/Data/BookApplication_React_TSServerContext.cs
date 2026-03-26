@@ -13,8 +13,49 @@ namespace BookApplication_React_TS.Server.Data
 
         public DbSet<Review> Reviews { get; set; } = default!;
 
+        public DbSet<Note> Notes { get; set; } = default!;
+
+        public DbSet<Highlight> Highlights { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Book>(entity =>
+            {
+                entity.Property(b => b.Description).HasColumnType("nvarchar(max)");
+                entity.Property(b => b.CoverUrl).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<Note>(entity =>
+            {
+                entity.Property(n => n.Content).HasColumnType("nvarchar(max)");
+                entity.Property(n => n.Title).HasMaxLength(200);
+
+                entity.HasOne(n => n.Book)
+                    .WithMany()
+                    .HasForeignKey(n => n.BookId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(n => n.User)
+                    .WithMany()
+                    .HasForeignKey(n => n.UserId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity<Highlight>(entity =>
+            {
+                entity.Property(h => h.Content).HasColumnType("nvarchar(max)");
+
+                entity.HasOne(h => h.Book)
+                    .WithMany()
+                    .HasForeignKey(h => h.BookId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(h => h.User)
+                    .WithMany()
+                    .HasForeignKey(h => h.UserId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(u => u.Username).HasMaxLength(50);

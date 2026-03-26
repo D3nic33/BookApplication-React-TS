@@ -1,13 +1,13 @@
-import PutBook from '../../../Components/Books/Edit/PutBook';
+import BookDetail from '../../../Components/Books/View/BookDetail';
 import DefaultLayout from '../../../Layouts/DefaultLayout';
-function EditBook() {
+function BookDetailPage() {
     return (
         <div>
             <DefaultLayout>
-                <PutBook />
+                <BookDetail />
             </DefaultLayout>
         </div>
     );
 }
 
-export default EditBook;
+export default BookDetailPage;
