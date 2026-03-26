@@ -57,14 +57,84 @@ dotnet run
 
 ## 🔌 API Endpoints
 
-| Method | Endpoint                       | Description         |
-|--------|--------------------------------|---------------------|
-| GET    | `/api/books`                   | Get all books       |
-| GET    | `/api/books/{id}`              | Get book by ID      |
-| GET    | `/api/books/shelf/{shelfName}` | Get books by shelf  |
-| POST   | `/api/books`                   | Add a new book      |
-| PUT    | `/api/books/{id}`              | Update a book       |
-| DELETE | `/api/books/{id}`              | Delete a book       |
+Here are all the available API endpoints:
+
+**Auth**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | Register a new user |
+| POST | `/api/auth/login` | Login and receive JWT |
+
+**Books**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/books` | Get all books for current user |
+| GET | `/api/books/{id}` | Get book by ID |
+| GET | `/api/books/shelf/{shelf}` | Get books by shelf name |
+| GET | `/api/books/shelves` | Get all shelf names for current user |
+| GET | `/api/books/user/{userId}` | Get public books grouped by shelf |
+| POST | `/api/books` | Add a new book |
+| PUT | `/api/books/{id}` | Update a book |
+| DELETE | `/api/books/{id}` | Delete a book |
+
+**Highlights**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/highlights/book/{bookId}` | Get highlights for a book |
+| POST | `/api/highlights/book/{bookId}` | Add a highlight to a book |
+| PUT | `/api/highlights/{id}` | Update a highlight |
+| DELETE | `/api/highlights/{id}` | Delete a highlight |
+
+**Notes**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/notes/book/{bookId}` | Get notes for a book |
+| POST | `/api/notes/book/{bookId}` | Add a note to a book |
+| PUT | `/api/notes/{id}` | Update a note |
+| DELETE | `/api/notes/{id}` | Delete a note |
+
+**Reviews**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/reviews/book/{bookId}` | Get all reviews for a book |
+| GET | `/api/reviews/book/{bookId}/mine` | Get current user's review for a book |
+| POST | `/api/reviews/book/{bookId}` | Create a review |
+| PUT | `/api/reviews/{id}` | Update a review |
+| DELETE | `/api/reviews/{id}` | Delete a review |
+
+**Users**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/user/me` | Get current user profile |
+| GET | `/api/user/me/counts` | Get current user follow counts |
+| GET | `/api/user/me/books/read/count` | Get count of read books |
+| GET | `/api/user/{userId}` | Get public profile by user ID |
+| PUT | `/api/user/me` | Update current user profile |
+| PUT | `/api/user/me/password` | Change password |
+
+**Follow**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/follow/{targetUserId}` | Follow a user |
+| DELETE | `/api/follow/{targetUserId}` | Unfollow a user |
+| GET | `/api/follow/users/{userId}/followers` | Get followers of a user |
+| GET | `/api/follow/users/{userId}/following` | Get users a user is following |
+| GET | `/api/follow/isfollowing/{targetUserId}` | Check if following a user |
+| GET | `/api/follow/{userId}/counts` | Get follower/following counts |
+| GET | `/api/follow/search?query=` | Search users by username |
+
+**Google Books**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/googlebooks/search?q=` | Search Google Books |
 
 ---
 
