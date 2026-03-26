@@ -10,9 +10,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [token, setToken] = useState<string | null>(
-        () => localStorage.getItem('token')
-    );
+    const [token, setToken] = useState<string | null>(() => {
+        const stored = localStorage.getItem('token');
+        if (stored && isTokenExpired(stored)) {
+            localStorage.removeItem('token');
+            return null;
+        }
+        return stored;
+    });
     const isLoggedIn = !!token;
 
     const login = (token: string) => {
@@ -38,3 +43,12 @@ export const useAuth = () => {
     if (!context) throw new Error('useAuth must be used within an AuthProvider');
     return context;
 };
+
+export function isTokenExpired(token: string): boolean {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.exp * 1000 < Date.now();
+    } catch {
+        return true;
+    }
+}

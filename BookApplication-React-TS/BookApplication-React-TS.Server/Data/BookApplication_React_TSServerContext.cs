@@ -15,6 +15,8 @@ namespace BookApplication_React_TS.Server.Data
 
         public DbSet<Note> Notes { get; set; } = default!;
 
+        public DbSet<Highlight> Highlights { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Book>(entity =>
@@ -36,6 +38,21 @@ namespace BookApplication_React_TS.Server.Data
                 entity.HasOne(n => n.User)
                     .WithMany()
                     .HasForeignKey(n => n.UserId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity<Highlight>(entity =>
+            {
+                entity.Property(h => h.Content).HasColumnType("nvarchar(max)");
+
+                entity.HasOne(h => h.Book)
+                    .WithMany()
+                    .HasForeignKey(h => h.BookId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(h => h.User)
+                    .WithMany()
+                    .HasForeignKey(h => h.UserId)
                     .OnDelete(DeleteBehavior.NoAction);
             });
 

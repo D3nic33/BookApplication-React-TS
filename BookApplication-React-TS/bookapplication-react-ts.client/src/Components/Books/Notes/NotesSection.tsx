@@ -7,6 +7,7 @@ interface Note {
     userId: number;
     title: string;
     content: string;
+    pageNumber?: number;
     createdAt: string;
     updatedAt?: string;
 }
@@ -23,6 +24,7 @@ const NotesSection = ({ bookId }: NotesSectionProps) => {
     const [editingNote, setEditingNote] = useState<Note | null>(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [pageNumber, setPageNumber] = useState<number | ''>('');
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
     const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
@@ -44,6 +46,7 @@ const NotesSection = ({ bookId }: NotesSectionProps) => {
     const resetForm = () => {
         setTitle('');
         setContent('');
+        setPageNumber('');
         setError('');
         setShowForm(false);
         setEditingNote(null);
@@ -56,7 +59,7 @@ const NotesSection = ({ bookId }: NotesSectionProps) => {
         const res = await fetch(`/api/notes/book/${bookId}`, {
             method: 'POST',
             headers,
-            body: JSON.stringify({ title, content }),
+            body: JSON.stringify({ title, content, pageNumber: pageNumber === '' ? null : pageNumber }),
         });
         if (res.ok) {
             await fetchNotes();
@@ -76,7 +79,7 @@ const NotesSection = ({ bookId }: NotesSectionProps) => {
         const res = await fetch(`/api/notes/${editingNote.id}`, {
             method: 'PUT',
             headers,
-            body: JSON.stringify({ title, content }),
+            body: JSON.stringify({ title, content, pageNumber: pageNumber === '' ? null : pageNumber }),
         });
         if (res.ok) {
             await fetchNotes();
@@ -97,6 +100,7 @@ const NotesSection = ({ bookId }: NotesSectionProps) => {
         setEditingNote(note);
         setTitle(note.title);
         setContent(note.content);
+        setPageNumber(note.pageNumber ?? '');
         setError('');
         setShowForm(false);
     };
@@ -139,6 +143,14 @@ const NotesSection = ({ bookId }: NotesSectionProps) => {
                         maxLength={200}
                         className="w-full bg-white border border-orange-100 rounded-xl px-4 py-2 text-sm text-stone-700 placeholder-stone-300 focus:outline-none focus:ring-2 focus:ring-orange-200"
                     />
+                    <input
+                        type="number"
+                        min={1}
+                        value={pageNumber}
+                        onChange={e => setPageNumber(e.target.value === '' ? '' : Number(e.target.value))}
+                        placeholder="Page number (optional)"
+                        className="w-full bg-white border border-orange-100 rounded-xl px-4 py-2 text-sm text-stone-700 placeholder-stone-300 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                    />
                     <textarea
                         value={content}
                         onChange={e => setContent(e.target.value)}
@@ -177,6 +189,14 @@ const NotesSection = ({ bookId }: NotesSectionProps) => {
                         maxLength={200}
                         className="w-full bg-white border border-orange-100 rounded-xl px-4 py-2 text-sm text-stone-700 placeholder-stone-300 focus:outline-none focus:ring-2 focus:ring-orange-200"
                     />
+                    <input
+                        type="number"
+                        min={1}
+                        value={pageNumber}
+                        onChange={e => setPageNumber(e.target.value === '' ? '' : Number(e.target.value))}
+                        placeholder="Page number (optional)"
+                        className="w-full bg-white border border-orange-100 rounded-xl px-4 py-2 text-sm text-stone-700 placeholder-stone-300 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                    />
                     <textarea
                         value={content}
                         onChange={e => setContent(e.target.value)}
@@ -213,6 +233,9 @@ const NotesSection = ({ bookId }: NotesSectionProps) => {
                             <div className="flex flex-col gap-0.5">
                                 {note.title && (
                                     <span className="text-sm font-semibold text-stone-700">{note.title}</span>
+                                )}
+                                {note.pageNumber != null && (
+                                    <span className="text-xs text-orange-400 font-bold">p. {note.pageNumber}</span>
                                 )}
                                 <span className="text-xs text-stone-300">
                                     {new Date(note.createdAt).toLocaleDateString('en-GB', {

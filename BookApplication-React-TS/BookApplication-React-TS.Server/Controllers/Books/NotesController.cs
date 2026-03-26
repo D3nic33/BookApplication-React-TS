@@ -29,7 +29,7 @@ namespace BookApplication_React_TS.Server.Controllers.Books
             var notes = await _db.Notes
                 .Where(n => n.BookId == bookId && n.UserId == userId)
                 .OrderByDescending(n => n.CreatedAt)
-                .Select(n => new NoteResponseDto(n.Id, n.BookId, n.UserId, n.Title, n.Content, n.CreatedAt, n.UpdatedAt))
+                .Select(n => new NoteResponseDto(n.Id, n.BookId, n.UserId, n.Title, n.Content, n.PageNumber, n.CreatedAt, n.UpdatedAt))
                 .ToListAsync();
 
             return Ok(notes);
@@ -55,14 +55,15 @@ namespace BookApplication_React_TS.Server.Controllers.Books
                 BookId = bookId,
                 UserId = userId,
                 Title = dto.Title,
-                Content = dto.Content
+                Content = dto.Content,
+                PageNumber = dto.PageNumber
             };
 
             _db.Notes.Add(note);
             await _db.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetNotesForBook), new { bookId },
-                new NoteResponseDto(note.Id, note.BookId, note.UserId, note.Title, note.Content, note.CreatedAt, note.UpdatedAt));
+                new NoteResponseDto(note.Id, note.BookId, note.UserId, note.Title, note.Content, note.PageNumber, note.CreatedAt, note.UpdatedAt));
         }
 
         // PUT: api/notes/5
@@ -79,6 +80,7 @@ namespace BookApplication_React_TS.Server.Controllers.Books
 
             note.Title = dto.Title;
             note.Content = dto.Content;
+            note.PageNumber = dto.PageNumber;
             note.UpdatedAt = DateTime.UtcNow;
 
             await _db.SaveChangesAsync();

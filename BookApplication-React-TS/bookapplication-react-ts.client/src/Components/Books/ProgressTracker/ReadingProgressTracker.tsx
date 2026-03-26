@@ -31,7 +31,10 @@ const ReadingProgressTracker = ({
                         max={totalPages ?? undefined}
                         value={currentPage ?? ""}
                         onChange={e =>
-                            onCurrentPageChange(e.target.value === "" ? null : Math.max(0, parseInt(e.target.value)))
+                            onCurrentPageChange(e.target.value === "" ? null : Math.min(
+                                Math.max(0, parseInt(e.target.value)),
+                                totalPages ?? Infinity
+                            ))
                         }
                         placeholder="0"
                         className="w-full bg-amber-50 border border-orange-100 rounded-xl px-4 py-2 text-sm text-stone-700 placeholder-stone-300 focus:outline-none focus:ring-2 focus:ring-orange-200"
@@ -46,9 +49,13 @@ const ReadingProgressTracker = ({
                         type="number"
                         min={1}
                         value={totalPages ?? ""}
-                        onChange={e =>
-                            onTotalPagesChange(e.target.value === "" ? null : Math.max(1, parseInt(e.target.value)))
-                        }
+                        onChange={e => {
+                            const newTotal = e.target.value === "" ? null : Math.max(1, parseInt(e.target.value));
+                            onTotalPagesChange(newTotal);
+                            if (newTotal !== null && currentPage !== null && currentPage > newTotal) {
+                                onCurrentPageChange(newTotal);
+                            }
+                        }}
                         placeholder="e.g. 320"
                         className="w-full bg-amber-50 border border-orange-100 rounded-xl px-4 py-2 text-sm text-stone-700 placeholder-stone-300 focus:outline-none focus:ring-2 focus:ring-orange-200"
                     />

@@ -4,6 +4,7 @@ import { useAuth } from '../../../Context/AuthContext';
 import StarRatingShow from '../../Rating/StarRatingShow';
 import ReviewSection from '../Review/ReviewSection';
 import NotesSection from '../Notes/NotesSection';
+import HighlightSection from '../Notes/HighlightSection';
 
 interface Book {
     id: number;
@@ -222,12 +223,14 @@ const BookDetail = () => {
 
                     </div>
 
-                    {/* Notes — Reading shelf only */}
+                    {/* Notes & Highlights — Reading shelf only */}
                     {isReadingShelf && (
-                        <div>
+                        <>
                             <div className="h-px bg-orange-50" />
                             <NotesSection bookId={book.id} />
-                        </div>
+                            <div className="h-px bg-orange-50" />
+                            <HighlightSection bookId={book.id} />
+                        </>
                     )}
 
                     <div className="h-px bg-orange-50" />
