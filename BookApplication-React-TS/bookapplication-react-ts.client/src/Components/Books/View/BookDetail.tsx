@@ -224,10 +224,10 @@ const BookDetail = () => {
 
                     {/* Notes — Reading shelf only */}
                     {isReadingShelf && (
-                        <>
+                        <div>
                             <div className="h-px bg-orange-50" />
                             <NotesSection bookId={book.id} />
-                        </>
+                        </div>
                     )}
 
                     <div className="h-px bg-orange-50" />
