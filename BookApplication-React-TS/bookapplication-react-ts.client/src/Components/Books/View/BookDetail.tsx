@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../../Context/AuthContext';
 import StarRatingShow from '../../Rating/StarRatingShow';
 import ReviewSection from '../Review/ReviewSection';
+import NotesSection from '../Notes/NotesSection';
 
 interface Book {
     id: number;
@@ -220,6 +221,14 @@ const BookDetail = () => {
                         )}
 
                     </div>
+
+                    {/* Notes — Reading shelf only */}
+                    {isReadingShelf && (
+                        <>
+                            <div className="h-px bg-orange-50" />
+                            <NotesSection bookId={book.id} />
+                        </>
+                    )}
 
                     <div className="h-px bg-orange-50" />
 
