@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
+import ReadingStats from "./ReadingStats";
 interface UserProfile {
     id: number;
     username: string;
@@ -136,6 +137,9 @@ const ViewProfile = () => {
                     </div>
                 )}
             </div>
+
+            {/* Reading Stats */}
+            <ReadingStats />
 
             {/* Edit button */}
             <div className="max-w-xl mx-auto">

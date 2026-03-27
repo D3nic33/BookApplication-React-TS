@@ -74,6 +74,45 @@ namespace BookApplication_React_TS.Server.Controllers.Users
             return Ok(new { count });
         }
 
+        [HttpGet("me/stats")]
+        public async Task<IActionResult> GetReadingStats()
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var now = DateTime.UtcNow;
+            var monthStart = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+            var yearStart = new DateTime(now.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            var books = await _db.Book.Where(b => b.UserId == userId).ToListAsync();
+
+            var completedThisMonth = books
+                .Where(b => b.Shelf.Equals("Read", StringComparison.OrdinalIgnoreCase)
+                         && b.DateCompleted.HasValue
+                         && b.DateCompleted.Value >= monthStart)
+                .ToList();
+
+            var booksReadThisMonth = completedThisMonth.Count;
+
+            var booksReadThisYear = books.Count(b =>
+                b.Shelf.Equals("Read", StringComparison.OrdinalIgnoreCase)
+                && b.DateCompleted.HasValue
+                && b.DateCompleted.Value >= yearStart);
+
+            var pagesFromCompleted = completedThisMonth.Sum(b => b.TotalPages ?? 0);
+            var pagesFromReading = books
+                .Where(b => b.Shelf.Equals("Reading", StringComparison.OrdinalIgnoreCase))
+                .Sum(b => b.CurrentPage ?? 0);
+            var pagesReadThisMonth = pagesFromCompleted + pagesFromReading;
+
+            var genreBreakdown = completedThisMonth
+                .Where(b => !string.IsNullOrWhiteSpace(b.Genre))
+                .GroupBy(b => b.Genre)
+                .Select(g => new GenreStatDto(g.Key, g.Count()))
+                .OrderByDescending(g => g.Count)
+                .ToList();
+
+            return Ok(new ReadingStatsDto(booksReadThisMonth, booksReadThisYear, pagesReadThisMonth, genreBreakdown));
+        }
+
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetPublicProfile(int userId)
         {

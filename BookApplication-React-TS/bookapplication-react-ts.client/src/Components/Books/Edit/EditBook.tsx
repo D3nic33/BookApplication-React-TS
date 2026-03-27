@@ -48,15 +48,17 @@ const EditBook = () => {
                 setBook({
                     ...data,
                     releaseDate: data.releaseDate ? data.releaseDate.split("T")[0] : "",
+                    shelf: data.shelf ? data.shelf.toLowerCase() : "",
                     currentPage: data.currentPage ?? null,
                     totalPages: data.totalPages ?? null,
                 })
             );
     }, [id]);
 
-    // Auto-populate total pages from Google Books when shelf is set to Reading
+    // Auto-populate total pages from Google Books when shelf is set to Reading or Read
     useEffect(() => {
-        if (book.shelf.toLowerCase() !== "reading") return;
+        const shelfLower = book.shelf.toLowerCase();
+        if (shelfLower !== "reading" && shelfLower !== "read") return;
         if (book.totalPages != null) return;
         if (!book.title) return; // wait until book has loaded
 

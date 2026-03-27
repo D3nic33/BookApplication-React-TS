@@ -53,7 +53,26 @@ namespace BookApplication_React_TS.Server.Controllers.Books
         {
             if (id != book.Id) return BadRequest();
 
-            book.UserId = GetUserId(); // ensure ownership
+            var userId = GetUserId();
+
+            // Use a non-tracked projection to check ownership and read current shelf/DateCompleted
+            var current = await _context.Book
+                .Where(b => b.Id == id && b.UserId == userId)
+                .Select(b => new { b.Shelf, b.DateCompleted })
+                .FirstOrDefaultAsync();
+            if (current == null) return NotFound();
+
+            var wasRead = current.Shelf.Equals("Read", StringComparison.OrdinalIgnoreCase);
+            var isNowRead = book.Shelf.Equals("Read", StringComparison.OrdinalIgnoreCase);
+
+            book.UserId = userId;
+            if (!wasRead && isNowRead)
+                book.DateCompleted = DateTime.UtcNow;
+            else if (wasRead && !isNowRead)
+                book.DateCompleted = null;
+            else
+                book.DateCompleted = current.DateCompleted;
+
             _context.Entry(book).State = EntityState.Modified;
 
             try
