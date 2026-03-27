@@ -1,4 +1,4 @@
-# ShelfWise — Book Management App
+# Shelfy — Book Management App
 
 A full-stack book management application where you can organise your reading life, track progress, annotate books, and see what the readers you follow are up to.
 
