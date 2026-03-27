@@ -1,6 +1,6 @@
 ﻿import { useState } from 'react';
 import { useAuth } from '../../../Context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface GoogleBook {
     id: string;
@@ -103,6 +103,19 @@ const GoogleBooksSearch = () => {
                 >
                     {loading ? '...' : 'Search'}
                 </button>
+            </div>
+
+            {/* Manual add fallback */}
+            <div className="max-w-xl mx-auto text-center mb-4">
+                <p className="text-sm text-stone-400">
+                    Can't find what you're looking for?{' '}
+                    <Link
+                        to="/books/add"
+                        className="text-orange-400 hover:text-orange-500 font-medium transition-colors"
+                    >
+                        Add it manually →
+                    </Link>
+                </p>
             </div>
 
             {error && <p className="text-red-400 text-sm text-center mb-4">{error}</p>}

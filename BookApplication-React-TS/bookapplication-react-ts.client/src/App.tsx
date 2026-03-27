@@ -12,6 +12,8 @@ import BookDetailPage from './Pages/Book/View/BookDetailPage.tsx';
 import SearchUsersPage from './Pages/Users/SearchUsersPage.tsx';
 import PublicProfilePage from './Pages/Profile/PublicProfilePage.tsx';
 import GoogleBooksSearchPage from './Pages/Book/Search/GoogleBooksSearchPage.tsx';
+import ActivityFeedPage from './Pages/Activity/ActivityFeedPage.tsx';
+import ActivityDetailPage from './Pages/Activity/ActivityDetailPage.tsx';
 
 function App() {
     return (
@@ -65,6 +67,16 @@ function App() {
                 <Route path="/books/search" element={
                     <PrivateRoute>
                         <GoogleBooksSearchPage />
+                    </PrivateRoute>
+                } />
+                <Route path="/activity" element={
+                    <PrivateRoute>
+                        <ActivityFeedPage />
+                    </PrivateRoute>
+                } />
+                <Route path="/activity/detail" element={
+                    <PrivateRoute>
+                        <ActivityDetailPage />
                     </PrivateRoute>
                 } />
 

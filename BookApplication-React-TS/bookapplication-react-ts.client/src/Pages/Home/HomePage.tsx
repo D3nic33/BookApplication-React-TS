@@ -87,8 +87,8 @@ const Home = () => {
                                 </a>
                             </div>
                         ) : (
-                            <div className="flex flex-wrap gap-3">
-                                <a href="/register" className="bg-orange-400 text-white font-semibold px-7 py-3 rounded-full shadow hover:bg-orange-500 transition-all">
+                                <div className="flex flex-wrap gap-3">
+                                    <a href="/login" className="bg-orange-400 text-white font-semibold px-7 py-3 rounded-full shadow hover:bg-orange-500 transition-all">
                                     Start for free →
                                 </a>
                                 <a href="/login" className="bg-white border-2 border-orange-300 text-orange-500 font-semibold px-7 py-3 rounded-full hover:bg-orange-50 transition-all">
