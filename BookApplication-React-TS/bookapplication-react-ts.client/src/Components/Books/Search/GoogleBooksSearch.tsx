@@ -10,6 +10,7 @@ interface GoogleBook {
         publishedDate?: string;
         description?: string;
         categories?: string[];
+        pageCount?: number;
         imageLinks?: {
             thumbnail?: string;
         };
@@ -51,6 +52,7 @@ const GoogleBooksSearch = () => {
             genre: info.categories?.[0] ?? '',
             description: info.description ?? '',
             coverUrl: info.imageLinks?.thumbnail ?? '',
+            totalPages: info.pageCount ?? null,
             rating: 0,
             shelf: 'Want to Read',
         };

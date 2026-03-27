@@ -29,6 +29,8 @@ namespace BookApplication_React_TS.Server.Models
 
         public int? TotalPages { get; set; }
 
+        public DateTime? DateCompleted { get; set; }
+
         public int UserId { get; set; }
 
         public User? User { get; set; }
