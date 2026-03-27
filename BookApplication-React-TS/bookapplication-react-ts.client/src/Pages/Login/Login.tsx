@@ -33,7 +33,7 @@ function Login() {
 
             const data = await res.json();
             localStorage.setItem('token', data.token);
-            window.location.href = '/';
+            window.location.href = '/activity';
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -53,7 +53,7 @@ function Login() {
                             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
                         </svg>
                     </div>
-                    <h1 className="text-2xl font-semibold text-stone-800 tracking-tight">Shelfwise</h1>
+                    <h1 className="text-2xl font-semibold text-stone-800 tracking-tight">Shelfy</h1>
                     <p className="text-stone-500 text-sm mt-1">
                         {mode === 'login' ? 'Welcome back to your library' : 'Start building your library'}
                     </p>

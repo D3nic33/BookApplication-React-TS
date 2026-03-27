@@ -31,6 +31,8 @@ namespace BookApplication_React_TS.Server.Models
 
         public DateTime? DateCompleted { get; set; }
 
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
         public int UserId { get; set; }
 
         public User? User { get; set; }

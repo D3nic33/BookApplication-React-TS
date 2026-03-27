@@ -58,7 +58,7 @@ namespace BookApplication_React_TS.Server.Controllers.Books
             // Use a non-tracked projection to check ownership and read current shelf/DateCompleted
             var current = await _context.Book
                 .Where(b => b.Id == id && b.UserId == userId)
-                .Select(b => new { b.Shelf, b.DateCompleted })
+                .Select(b => new { b.Shelf, b.DateCompleted, b.CreatedAt })
                 .FirstOrDefaultAsync();
             if (current == null) return NotFound();
 
@@ -66,6 +66,7 @@ namespace BookApplication_React_TS.Server.Controllers.Books
             var isNowRead = book.Shelf.Equals("Read", StringComparison.OrdinalIgnoreCase);
 
             book.UserId = userId;
+            book.CreatedAt = current.CreatedAt;
             if (!wasRead && isNowRead)
                 book.DateCompleted = DateTime.UtcNow;
             else if (wasRead && !isNowRead)
