@@ -17,6 +17,8 @@ namespace BookApplication_React_TS.Server.Data
 
         public DbSet<Highlight> Highlights { get; set; } = default!;
 
+        public DbSet<ReadingGoalHistory> ReadingGoalHistory { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Book>(entity =>
@@ -93,6 +95,16 @@ namespace BookApplication_React_TS.Server.Data
                     entity.Property(r => r.ReviewText).HasMaxLength(2000);
                     entity.Property(r => r.Stars).IsRequired();
                 });
+            });
+
+            modelBuilder.Entity<ReadingGoalHistory>(entity =>
+            {
+                entity.HasIndex(r => new { r.UserId, r.Year }).IsUnique();
+
+                entity.HasOne(r => r.User)
+                    .WithMany()
+                    .HasForeignKey(r => r.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

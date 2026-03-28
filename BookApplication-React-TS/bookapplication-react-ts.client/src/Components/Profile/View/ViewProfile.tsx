@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
 import ReadingStats from "./ReadingStats";
+
 interface UserProfile {
     id: number;
     username: string;
@@ -15,13 +16,19 @@ interface FollowCounts {
     following: number;
 }
 
+interface YearlyReading {
+    year: number;
+    goal: number | null;
+    booksRead: number;
+}
+
 const ViewProfile = () => {
     const { token } = useAuth();
     const navigate = useNavigate();
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
-    const [booksRead, setBooksRead] = useState(0);
     const [followCounts, setFollowCounts] = useState<FollowCounts>({ followers: 0, following: 0 });
+    const [currentYearEntry, setCurrentYearEntry] = useState<YearlyReading | null>(null);
 
     useEffect(() => {
         fetch("/api/user/me", {
@@ -36,17 +43,20 @@ const ViewProfile = () => {
                 setLoading(false);
             });
 
-        fetch("/api/user/me/books/read/count", {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(res => res.json())
-            .then(data => setBooksRead(data.count));
-
         fetch("/api/user/me/counts", {
             headers: { Authorization: `Bearer ${token}` }
         })
-            .then(res => res.json())
-            .then(data => setFollowCounts(data));
+            .then(res => res.ok ? res.json() : { followers: 0, following: 0 })
+            .then(data => setFollowCounts(data ?? { followers: 0, following: 0 }));
+
+        fetch("/api/user/me/reading-history", {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(res => res.ok ? res.json() : [])
+            .then((data: YearlyReading[]) => {
+                const entry = data.find(e => e.year === new Date().getFullYear()) ?? null;
+                setCurrentYearEntry(entry);
+            });
     }, []);
 
     if (loading) return (
@@ -60,10 +70,6 @@ const ViewProfile = () => {
             <p className="text-red-400">Could not load profile.</p>
         </div>
     );
-
-    const goalProgress = profile.readingGoal
-        ? Math.min((booksRead / profile.readingGoal) * 100, 100)
-        : 0;
 
     return (
         <div className="min-h-screen bg-amber-50 px-6 py-12">
@@ -119,23 +125,32 @@ const ViewProfile = () => {
                 </div>
 
                 {/* Reading Goal */}
-                {profile.readingGoal && (
-                    <div className="flex flex-col gap-2">
-                        <div className="flex justify-between text-sm font-medium text-stone-700">
-                            <span>📚 Reading Goal</span>
-                            <span className="text-orange-400 font-semibold">{profile.readingGoal} books this year</span>
+                {currentYearEntry && currentYearEntry.goal !== null && (() => {
+                    const progress = Math.min((currentYearEntry.booksRead / currentYearEntry.goal) * 100, 100);
+                    return (
+                        <div className="flex flex-col gap-2">
+                            <div className="flex justify-between text-sm font-medium text-stone-700">
+                                <span>📚 Reading Goal</span>
+                                <span className="text-orange-400 font-semibold">{currentYearEntry.goal} books this year</span>
+                            </div>
+                            <div className="w-full bg-orange-100 rounded-full h-3">
+                                <div
+                                    className="bg-orange-400 h-3 rounded-full transition-all"
+                                    style={{ width: `${progress}%` }}
+                                />
+                            </div>
+                            <p className="text-xs text-stone-400 text-right">
+                                {currentYearEntry.booksRead} / {currentYearEntry.goal} books read
+                            </p>
+                            <button
+                                onClick={() => navigate("/profile/reading-goal-history")}
+                                className="w-full mt-1 bg-orange-400 hover:bg-orange-500 active:bg-orange-600 text-white font-semibold py-3 rounded-full shadow transition-all"
+                            >
+                                View Reading Goal History
+                            </button>
                         </div>
-                        <div className="w-full bg-orange-100 rounded-full h-3">
-                            <div
-                                className="bg-orange-400 h-3 rounded-full transition-all"
-                                style={{ width: `${goalProgress}%` }}
-                            />
-                        </div>
-                        <p className="text-xs text-stone-400 text-right">
-                            {booksRead} / {profile.readingGoal} books read
-                        </p>
-                    </div>
-                )}
+                    );
+                })()}
             </div>
 
             {/* Reading Stats */}

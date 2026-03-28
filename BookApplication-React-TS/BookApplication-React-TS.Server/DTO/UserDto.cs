@@ -11,4 +11,6 @@ namespace BookApplication_React_TS.Server.DTO
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters.")]
         public required string NewPassword { get; set; }
     }
+
+    public record YearlyReadingDto(int Year, int? Goal, int BooksRead);
 }

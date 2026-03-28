@@ -14,6 +14,7 @@ import PublicProfilePage from './Pages/Profile/PublicProfilePage.tsx';
 import GoogleBooksSearchPage from './Pages/Book/Search/GoogleBooksSearchPage.tsx';
 import ActivityFeedPage from './Pages/Activity/ActivityFeedPage.tsx';
 import ActivityDetailPage from './Pages/Activity/ActivityDetailPage.tsx';
+import ReadingGoalHistoryPage from './Pages/Profile/ReadingGoalHistoryPage.tsx';
 
 function App() {
     return (
@@ -77,6 +78,11 @@ function App() {
                 <Route path="/activity/detail" element={
                     <PrivateRoute>
                         <ActivityDetailPage />
+                    </PrivateRoute>
+                } />
+                <Route path="/profile/reading-goal-history" element={
+                    <PrivateRoute>
+                        <ReadingGoalHistoryPage />
                     </PrivateRoute>
                 } />
 
