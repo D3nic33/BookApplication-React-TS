@@ -82,7 +82,7 @@ const Home = () => {
                                 <a href="/books" className="bg-orange-400 text-white font-semibold px-7 py-3 rounded-full shadow hover:bg-orange-500 transition-all">
                                     My Library 📖
                                 </a>
-                                <a href="/books/add" className="bg-white border-2 border-orange-400 text-orange-500 font-semibold px-7 py-3 rounded-full hover:bg-orange-50 transition-all">
+                                <a href="/books/search" className="bg-white border-2 border-orange-400 text-orange-500 font-semibold px-7 py-3 rounded-full hover:bg-orange-50 transition-all">
                                     + Add a Book
                                 </a>
                             </div>
@@ -142,7 +142,7 @@ const Home = () => {
                         <div className="bg-white rounded-2xl p-10 text-center border border-orange-100 shadow-sm">
                             <div className="text-4xl mb-3">📭</div>
                             <p className="text-stone-500 mb-4">No books yet — add your first one!</p>
-                            <a href="/books/add" className="bg-orange-400 hover:bg-orange-500 text-white font-semibold px-6 py-2.5 rounded-full shadow transition-all text-sm">
+                            <a href="/books/search" className="bg-orange-400 hover:bg-orange-500 text-white font-semibold px-6 py-2.5 rounded-full shadow transition-all text-sm">
                                 + Add a Book
                             </a>
                         </div>
@@ -198,7 +198,7 @@ const Home = () => {
                     <h2 className="text-3xl font-bold text-white mb-3">Ready to start your library?</h2>
                     <p className="text-orange-50 mb-8">Join and start tracking your books today — completely free.</p>
                     <a
-                        href="/register"
+                        href="/login"
                         className="bg-white text-orange-500 font-bold px-10 py-3 rounded-full shadow hover:shadow-md hover:bg-orange-50 transition-all"
                     >
                         Create your library →

@@ -48,6 +48,22 @@ namespace BookApplication_React_TS.Server.Controllers.Users
             _db.Entry(user).State = EntityState.Modified;
             await _db.SaveChangesAsync();
 
+            if (dto.ReadingGoal.HasValue)
+            {
+                var currentYear = DateTime.UtcNow.Year;
+                var existingGoal = await _db.ReadingGoalHistory
+                    .FirstOrDefaultAsync(r => r.UserId == userId && r.Year == currentYear);
+
+                if (existingGoal is null)
+                    _db.ReadingGoalHistory.Add(new ReadingGoalHistory { UserId = userId, Year = currentYear, Goal = dto.ReadingGoal.Value });
+                else
+                {
+                    existingGoal.Goal = dto.ReadingGoal.Value;
+                    _db.Entry(existingGoal).State = EntityState.Modified;
+                }
+                await _db.SaveChangesAsync();
+            }
+
             return Ok(new UserProfileDto(user.Id, user.Username, user.Email, user.Bio, user.ReadingGoal));
         }
 
@@ -111,6 +127,36 @@ namespace BookApplication_React_TS.Server.Controllers.Users
                 .ToList();
 
             return Ok(new ReadingStatsDto(booksReadThisMonth, booksReadThisYear, pagesReadThisMonth, genreBreakdown));
+        }
+
+        [HttpGet("me/reading-history")]
+        public async Task<IActionResult> GetReadingHistory()
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var user = await _db.User.FindAsync(userId);
+            if (user is null) return NotFound();
+
+            var startYear = user.CreatedAt.Year;
+            var currentYear = DateTime.UtcNow.Year;
+
+            var readBooks = await _db.Book
+                .Where(b => b.UserId == userId && b.Shelf == "Read" && b.DateCompleted.HasValue)
+                .Select(b => b.DateCompleted!.Value.Year)
+                .ToListAsync();
+
+            var goalsByYear = await _db.ReadingGoalHistory
+                .Where(r => r.UserId == userId)
+                .ToDictionaryAsync(r => r.Year, r => r.Goal);
+
+            var result = new List<YearlyReadingDto>();
+            for (int year = startYear; year <= currentYear; year++)
+            {
+                int booksRead = readBooks.Count(y => y == year);
+                int? goal = goalsByYear.TryGetValue(year, out var g) ? g : null;
+                result.Add(new YearlyReadingDto(year, goal, booksRead));
+            }
+
+            return Ok(result);
         }
 
         [HttpGet("{userId}")]
