@@ -17,7 +17,7 @@ function SubmitPopup({ isOpen, onClose, title, message }: PopupProps) {
             />
 
             {/* Modal */}
-            <div className="relative bg-white rounded-2xl shadow-xl p-6 w-80 flex flex-col items-center gap-4 z-10">
+            <div className="relative bg-white rounded-2xl shadow-xl p-6 w-[90vw] max-w-sm flex flex-col items-center gap-4 z-10">
                 <div className="text-4xl"></div>
                 <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
                 <p className="text-gray-500 text-center">{message}</p>

@@ -67,7 +67,7 @@ const ActivityFeed = () => {
     }, [token]);
 
     return (
-        <div className="min-h-screen bg-amber-50 px-6 py-12">
+        <div className="min-h-screen bg-amber-50 px-4 sm:px-6 py-12">
 
             {/* Page header */}
             <div className="max-w-2xl mx-auto mb-8">
@@ -81,7 +81,7 @@ const ActivityFeed = () => {
             </div>
 
             {/* Content */}
-            <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-8">
+            <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-5 sm:p-8">
                 {loading ? (
                     <div className="flex flex-col gap-4">
                         {[1, 2, 3].map(i => (

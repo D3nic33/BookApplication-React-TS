@@ -72,7 +72,7 @@ const ViewProfile = () => {
     );
 
     return (
-        <div className="min-h-screen bg-amber-50 px-6 py-12">
+        <div className="min-h-screen bg-amber-50 px-4 sm:px-6 py-12">
 
             {/* Page header */}
             <div className="max-w-xl mx-auto mb-8">
@@ -85,7 +85,7 @@ const ViewProfile = () => {
             </div>
 
             {/* Profile Card */}
-            <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-8 mb-6">
+            <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-5 sm:p-8 mb-6">
 
                 {/* Avatar + name */}
                 <div className="flex flex-col items-center gap-3 mb-6">

@@ -123,7 +123,7 @@ const PublicProfile = () => {
     const activeBooks = shelves.find(s => s.shelf === activeShelf)?.books ?? [];
 
     return (
-        <div className="min-h-screen bg-amber-50 px-6 py-12">
+        <div className="min-h-screen bg-amber-50 px-4 sm:px-6 py-12">
 
             {/* Back button */}
             <div className="max-w-2xl mx-auto mb-6">
@@ -146,7 +146,7 @@ const PublicProfile = () => {
             </div>
 
             {/* Profile Card */}
-            <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-8 mb-6">
+            <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-5 sm:p-8 mb-6">
                 <div className="flex flex-col items-center gap-3 mb-6">
                     <div className="w-24 h-24 rounded-full bg-orange-400 flex items-center justify-center text-white text-4xl font-bold shadow-md">
                         {profile.username.charAt(0).toUpperCase()}
@@ -257,7 +257,7 @@ const PublicProfile = () => {
                     </div>
                 </div>
             ) : (
-                <div className="max-w-2xl mx-auto bg-white rounded-3xl border border-orange-100 p-8 text-center">
+                <div className="max-w-2xl mx-auto bg-white rounded-3xl border border-orange-100 p-5 sm:p-8 text-center">
                     <p className="italic text-stone-300 text-sm">This reader hasn't added any books yet.</p>
                 </div>
             )}

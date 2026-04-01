@@ -49,7 +49,7 @@ function ActivityDetail() {
 
     if (!item) {
         return (
-            <div className="min-h-screen bg-amber-50 px-6 py-12 flex items-center justify-center">
+            <div className="min-h-screen bg-amber-50 px-4 sm:px-6 py-12 flex items-center justify-center">
                 <div className="text-center">
                     <div className="text-5xl mb-4">🔍</div>
                     <p className="text-stone-600 font-medium mb-4">Activity not found.</p>
@@ -68,7 +68,7 @@ function ActivityDetail() {
     const shelf = shelfLabel[item.book.shelf?.toLowerCase()] ?? item.book.shelf;
 
     return (
-        <div className="min-h-screen bg-amber-50 px-6 py-12">
+        <div className="min-h-screen bg-amber-50 px-4 sm:px-6 py-12">
 
             {/* Back button */}
             <div className="max-w-xl mx-auto mb-6">
@@ -91,7 +91,7 @@ function ActivityDetail() {
             </div>
 
             {/* Card */}
-            <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-8 flex flex-col gap-6">
+            <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-5 sm:p-8 flex flex-col gap-6">
 
                 {/* User row */}
                 <div className="flex items-center gap-3">

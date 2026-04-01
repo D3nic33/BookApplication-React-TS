@@ -39,7 +39,7 @@ const EditProfilePassword = () => {
     const labelClass = "text-sm font-medium text-stone-600";
 
     return (
-        <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-8">
+        <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 p-5 sm:p-8">
             <h3 className="text-lg font-bold text-stone-800 mb-5">Change Password 🔒</h3>
 
             <div className="flex flex-col gap-4">

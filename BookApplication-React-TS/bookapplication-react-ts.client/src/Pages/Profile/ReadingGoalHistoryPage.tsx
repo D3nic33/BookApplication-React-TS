@@ -7,7 +7,7 @@ function ReadingGoalHistoryPage() {
 
     return (
         <DefaultLayout>
-            <div className="min-h-screen bg-amber-50 px-6 py-12">
+            <div className="min-h-screen bg-amber-50 px-4 sm:px-6 py-12">
                 <div className="max-w-xl mx-auto mb-8">
                     <button
                         onClick={() => navigate("/profile")}
