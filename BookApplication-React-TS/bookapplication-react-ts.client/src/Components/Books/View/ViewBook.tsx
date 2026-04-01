@@ -33,7 +33,7 @@ function ViewBook() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-amber-50 px-6 py-12">
+        <div className="min-h-screen bg-amber-50 px-4 sm:px-6 py-12">
 
             {/* Page header */}
             <div className="max-w-5xl mx-auto mb-10">

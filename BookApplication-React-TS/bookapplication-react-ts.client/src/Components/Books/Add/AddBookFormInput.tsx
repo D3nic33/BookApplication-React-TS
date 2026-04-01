@@ -45,7 +45,7 @@ function AddBookFormInput({book, setBook, title, type } : {
         )
         : title === "shelf" ?
             (
-                <div className="flex flex-col w-80 mx-auto items-center justify-center py-3">
+                <div className="flex flex-col w-full items-center justify-center py-3">
                     <label>{title}</label>
                     <DropdownShelf
                         value={book.shelf}
@@ -54,7 +54,7 @@ function AddBookFormInput({book, setBook, title, type } : {
             )
             :
             (
-                <div className="flex flex-col w-80 mx-auto items-center justify-center py-3">
+                <div className="flex flex-col w-full items-center justify-center py-3">
                     <label className="">
                         {title}
                     </label>

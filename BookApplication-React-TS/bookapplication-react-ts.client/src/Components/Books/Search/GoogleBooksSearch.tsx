@@ -75,7 +75,7 @@ const GoogleBooksSearch = () => {
     };
 
     return (
-        <div className="min-h-screen bg-amber-50 px-6 py-12">
+        <div className="min-h-screen bg-amber-50 px-4 sm:px-6 py-12">
 
             <div className="max-w-xl mx-auto mb-8">
                 <span className="inline-block bg-orange-100 text-orange-500 text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-3">

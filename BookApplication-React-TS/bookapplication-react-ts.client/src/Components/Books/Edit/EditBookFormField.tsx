@@ -8,7 +8,7 @@ interface FormFieldProps {
 
 const PutBookFormField = ({ label, name, value, type = "text", onChange }: FormFieldProps) => {
     return (
-        <div className="flex flex-col w-80 mx-auto items-center justify-center py-3">
+        <div className="flex flex-col w-full items-center justify-center py-3">
             <label className="capitalize">{label}</label>
             <input
                 className="w-full border border-yellow-500/75 rounded-lg px-2 py-1"

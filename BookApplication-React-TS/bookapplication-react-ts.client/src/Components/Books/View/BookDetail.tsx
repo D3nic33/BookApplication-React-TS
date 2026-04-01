@@ -109,7 +109,7 @@ const BookDetail = () => {
         : 'Unknown';
 
     return (
-        <div className="min-h-screen bg-amber-50 px-6 py-12">
+        <div className="min-h-screen bg-amber-50 px-4 sm:px-6 py-12">
 
             {/* Back link */}
             <div className="max-w-xl mx-auto mb-6">
@@ -125,7 +125,7 @@ const BookDetail = () => {
             <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-orange-100 overflow-hidden">
 
                 {/* Colourful top banner */}
-                <div className="bg-gradient-to-r from-orange-400 to-amber-300 px-8 py-10 flex items-end gap-6">
+                <div className="bg-gradient-to-r from-orange-400 to-amber-300 px-4 py-8 sm:px-8 sm:py-10 flex items-end gap-6">
                     <div className="w-24 h-36 bg-white/30 rounded-xl border-2 border-white/50 shadow-lg overflow-hidden flex items-center justify-center flex-shrink-0">
                         {book.coverUrl
                             ? <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
@@ -141,7 +141,7 @@ const BookDetail = () => {
                 </div>
 
                 {/* Details */}
-                <div className="px-8 py-6 flex flex-col gap-5">
+                <div className="px-4 py-5 sm:px-8 sm:py-6 flex flex-col gap-5">
 
                     {/* Shelf badge */}
                     <div className="flex items-center gap-2">
